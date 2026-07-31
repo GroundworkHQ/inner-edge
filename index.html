@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inner Edge Scalping | Everything You Need To Become A Trader</title>
+  <meta name="description" content="A proven profitable FX strategy, a customisable TradingView indicator, live weekly training, daily trade analysis and a community of traders. All in one place for $77 per month." />
+  <link rel="icon" type="image/png" href="assets/logo-mark.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Saira+Condensed:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- Ambient chart canvas: sits behind the whole page -->
+  <canvas id="chartCanvas" aria-hidden="true"></canvas>
+  <div class="bg-veil" aria-hidden="true"></div>
+  <!-- Crosshair rides above the veil so it reads as UI, not background -->
+  <canvas id="crossCanvas" aria-hidden="true"></canvas>
+
+  <header class="nav" id="nav">
+    <div class="wrap nav__inner">
+      <a class="nav__brand" href="#top" aria-label="Inner Edge Scalping home">
+        <img src="assets/logo-mark.png" alt="Inner Edge Scalping" />
+      </a>
+      <nav class="nav__links" id="navLinks" aria-label="Primary">
+        <a href="#included">What's Included</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <div class="nav__cta">
+        <a class="btn btn--sm" href="#pricing">Join Now</a>
+        <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ================= HERO ================= -->
+    <section class="hero" id="top">
+      <div class="wrap hero__inner">
+        <img class="hero__logo" src="assets/logo-web.png" alt="Inner Edge Scalping" />
+
+        <p class="eyebrow"><span class="dot"></span> Live Trading Community</p>
+
+        <h1 class="hero__title">
+          Trade With Precision.<br />
+          <span class="grad">Win With Edge.</span>
+        </h1>
+
+        <p class="hero__sub">
+          A proven profitable FX strategy, the indicator that finds it for you, and a room full of
+          traders who trade it every day. Everything you need in one place.
+        </p>
+
+        <div class="hero__actions">
+          <a class="btn btn--lg" href="#pricing">
+            Get Instant Access
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M13.5 4.5 21 12l-7.5 7.5-1.42-1.41L17.17 13H3v-2h14.17l-5.09-5.09z"/></svg>
+          </a>
+          <a class="btn btn--ghost btn--lg" href="#included">See What's Included</a>
+        </div>
+
+        <div class="hero__price">
+          <span class="hero__price-num">$77</span>
+          <span class="hero__price-per">per month</span>
+          <span class="hero__price-sep"></span>
+          <span class="hero__price-note">Cancel anytime</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= MARKET SESSIONS =================
+         Real open/closed state, computed from each exchange's own
+         local time via Intl, so DST is always correct. -->
+    <div class="sessions">
+      <div class="wrap sessions__inner">
+        <div class="sessions__head">
+          <span class="sessions__label">Market Sessions</span>
+          <span class="sessions__utc" id="sessionsUtc"></span>
+        </div>
+        <ul class="sessions__list" id="sessionsList"></ul>
+      </div>
+    </div>
+
+    <!-- ================= INSIDE THE ROOM =================
+         Discord sidebar rebuilt in markup rather than screenshotted,
+         so no join links, member names or invites leak onto a public
+         page. Channel names mirror the real server. -->
+    <section class="section" id="room">
+      <div class="wrap">
+        <div class="head" data-reveal>
+          <p class="eyebrow"><span class="dot"></span> Inside The Discord</p>
+          <h2 class="h2">This Is Where<br /><span class="grad">It Actually Happens</span></h2>
+          <p class="lede">
+            Membership gets you into the private Inner Edge Scalping Discord server. Not a course
+            you watch alone, but a room that runs every session.
+          </p>
+        </div>
+
+        <p class="dc__hint" data-reveal>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="m9.5 5.5 7 6.5-7 6.5-1.4-1.3 5.6-5.2-5.6-5.2z"/></svg>
+          Click any channel to look inside
+        </p>
+
+        <div class="dc" data-reveal>
+          <aside class="dc__side">
+            <div class="dc__server">
+              <img src="assets/logo-mark.png" alt="" />
+              <span class="dc__server-name">
+                Inner Edge Scalping
+                <span class="dc__server-sub">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037 13.78 13.78 0 0 0-.608 1.25 18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.32.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.099.246.197.373.291a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.893.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .84.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+                  Discord Server
+                </span>
+              </span>
+            </div>
+
+            <div class="dc__group">
+              <p class="dc__cat">Essentials</p>
+              <ul>
+                <li><button type="button" data-ch="rules-and-info"><i>📋</i>rules-and-info</button></li>
+                <li><button type="button" data-ch="announcements"><i>📣</i>announcements</button></li>
+              </ul>
+            </div>
+
+            <div class="dc__group">
+              <p class="dc__cat">Trading</p>
+              <ul>
+                <li><button type="button" data-ch="charts-and-chat"><i>💬</i>charts-and-chat</button></li>
+                <li><button type="button" data-ch="daily-news"><i>📈</i>daily-news</button></li>
+                <li><button type="button" data-ch="breaking-news"><i>🚨</i>breaking-news</button></li>
+              </ul>
+            </div>
+
+            <div class="dc__group">
+              <p class="dc__cat">Community Hub</p>
+              <ul>
+                <li><button type="button" data-ch="general-chat"><i>💬</i>general-chat</button></li>
+                <li><button type="button" data-ch="tech-talk"><i>💻</i>tech-talk</button></li>
+                <li><button type="button" data-ch="tuesday-tune-up"><i>🔧</i>tuesday-tune-up</button></li>
+                <li><button type="button" data-ch="tools-and-resources"><i>🧰</i>tools-and-resources</button></li>
+                <li><button type="button" data-ch="zoom-recordings"><i>🎥</i>zoom-recordings</button></li>
+                <li><button type="button" data-ch="feedback-and-suggestions"><i>💡</i>feedback-and-suggestions</button></li>
+                <li><button type="button" data-ch="server-support"><i>📖</i>server-support</button></li>
+              </ul>
+            </div>
+
+            <div class="dc__group">
+              <p class="dc__cat">Voice Channels</p>
+              <ul><li class="is-voice"><button type="button" data-ch="traders-lounge"><i>🎧</i>traders-lounge</button></li></ul>
+            </div>
+
+            <div class="dc__group">
+              <p class="dc__cat">Live Streams</p>
+              <ul><li class="is-live"><button type="button" data-ch="traders-stage"><i>📹</i>traders-stage</button></li></ul>
+            </div>
+          </aside>
+
+          <div class="dc__main">
+            <header class="dc__top">
+              <span class="dc__hash">#</span>
+              <strong id="dcName">announcements</strong>
+              <span class="dc__topic" id="dcTopic"></span>
+            </header>
+            <div class="dc__feed" id="dcFeed"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CURRICULUM ================= -->
+    <section class="section" id="curriculum">
+      <div class="wrap wrap--mid">
+        <div class="head" data-reveal>
+          <h2 class="h2">Six Modules.<br /><span class="grad">Growing Every Week.</span></h2>
+          <p class="lede">
+            Thirty core lessons take you from the foundations through to funded. A new live trade
+            breakdown lands on top of that every week.
+          </p>
+        </div>
+
+        <ol class="mod" data-reveal>
+          <li>
+            <details>
+              <summary class="mod__row">
+                <span class="mod__n">01</span>
+                <span class="mod__head">
+                  <h3>Start Here: Foundations</h3>
+                  <p>The groundwork, before any strategy goes near a chart.</p>
+                </span>
+                <span class="mod__count">07</span>
+              </summary>
+                <ul class="mod__lessons">
+                    <li>Join the Community (Discord Access)</li>
+                    <li>How the Forex Market Really Moves</li>
+                    <li>Understanding Trend Structure</li>
+                    <li>Pullbacks &amp; Market Timing</li>
+                    <li>Reading Candlesticks with Intent</li>
+                    <li>The 3 Phases of the Market</li>
+                    <li>Common Trading Mistakes (Avoid These Early)</li>
+                </ul>
+            </details>
+          </li>
+          <li>
+            <details>
+              <summary class="mod__row">
+                <span class="mod__n">02</span>
+                <span class="mod__head">
+                  <h3>The Inner Edge Strategy</h3>
+                  <p>The system itself, taught rule by rule.</p>
+                </span>
+                <span class="mod__count">04</span>
+              </summary>
+                <ul class="mod__lessons">
+                    <li>Chart Setup &amp; Initial Configuration</li>
+                    <li>The 5-Minute Entry Model</li>
+                    <li>Stop Loss Placement (Precision &amp; Protection)</li>
+                    <li>The Re-Entry Model</li>
+                </ul>
+            </details>
+          </li>
+          <li>
+            <details>
+              <summary class="mod__row">
+                <span class="mod__n">03</span>
+                <span class="mod__head">
+                  <h3>Trader Psychology &amp; Discipline</h3>
+                  <p>The part that decides whether the strategy survives a losing run.</p>
+                </span>
+                <span class="mod__count">06</span>
+              </summary>
+                <ul class="mod__lessons">
+                    <li>Your Personal Trading Blueprint</li>
+                    <li>Shaping Your Trading Perspective</li>
+                    <li>Mastering Your Nervous System</li>
+                    <li>Breaking Limiting Beliefs in Trading</li>
+                    <li>The Role of Mentorship in Trading Growth</li>
+                    <li>Vision &amp; Goal Setting for Traders</li>
+                </ul>
+            </details>
+          </li>
+          <li>
+            <details>
+              <summary class="mod__row">
+                <span class="mod__n">04</span>
+                <span class="mod__head">
+                  <h3>Trading Tools &amp; Setup</h3>
+                  <p>Every platform configured properly, from demo account to journal.</p>
+                </span>
+                <span class="mod__count">09</span>
+              </summary>
+                <ul class="mod__lessons">
+                    <li>Setting Up a Demo Account for MT5</li>
+                    <li>Setting Up MT5</li>
+                    <li>Charting Platform: TradingView</li>
+                    <li>MT5 Entry Execution</li>
+                    <li>TradeLocker Entry Execution</li>
+                    <li>Executing Trades (MT5 &amp; TradeLocker)</li>
+                    <li>How to Use Trade Assist MT5</li>
+                    <li>Trade Manager InvestSoft for MT5</li>
+                    <li>Building Your Trading Journal the Right Way</li>
+                </ul>
+            </details>
+          </li>
+          <li>
+            <details>
+              <summary class="mod__row">
+                <span class="mod__n">05</span>
+                <span class="mod__head">
+                  <h3>Prop Firm Strategy &amp; Funding</h3>
+                  <p>Passing evaluations and trading funded capital.</p>
+                </span>
+                <span class="mod__count">04</span>
+              </summary>
+                <ul class="mod__lessons">
+                    <li>How Prop Firms Work</li>
+                    <li>The Mindset for Passing Challenges</li>
+                    <li>How to Use a Free Trial to Prepare</li>
+                    <li>Getting Funded: Tools &amp; Requirements</li>
+                </ul>
+            </details>
+          </li>
+          <li>
+            <details>
+              <summary class="mod__row">
+                <span class="mod__n">06</span>
+                <span class="mod__head">
+                  <h3>Live Trade Breakdowns</h3>
+                  <p>Real dated trades pulled apart, plus monthly journal reviews.</p>
+                </span>
+                <span class="mod__count mod__count--live">New weekly</span>
+              </summary>
+                <p class="mod__note">A new breakdown is added every week, along with monthly journal reviews, so this module keeps growing for as long as you are a member. Everything already in there is yours from day one.</p>
+            </details>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ================= INSTRUCTORS ================= -->
+    <section class="section" id="coaches">
+      <div class="wrap wrap--mid">
+        <div class="head" data-reveal>
+          <h2 class="h2">Who's <span class="grad">Teaching You</span></h2>
+        </div>
+
+        <div class="coach" data-reveal>
+          <figure class="coach__photo">
+            <img src="assets/coaches.jpg" alt="Wendy and Lee, the Inner Edge Scalping coaches, at their trading desks" />
+          </figure>
+
+          <div class="coach__inner">
+            <div class="coach__top">
+              <h3 class="coach__name">Wendy &amp; Lee</h3>
+              <p class="coach__role">IES Coaches</p>
+              <p class="coach__intro">
+                Inner Edge is the brainchild of Wendy and Lee, who met through an academy they were
+                both part of and combined what they knew into one structured, no-nonsense approach
+                built on real experience rather than hype.
+              </p>
+            </div>
+
+            <div class="coach__pair">
+              <div class="coach__one">
+                <h4>Wendy</h4>
+                <p>
+                  Three years in Forex, working through multiple trading styles before specialising
+                  in scalping. Real market experience shaped the clear, repeatable approach the
+                  strategy is built on, and her background is what drives the mindset side of how
+                  Inner Edge is taught.
+                </p>
+                <ul class="coach__creds">
+                  <li>Former Paralympic Wheelchair Basketball player</li>
+                  <li>NLP Master Practitioner and Trainer</li>
+                  <li>TEDx speaker, author of several books and former radio host</li>
+                </ul>
+              </div>
+
+              <div class="coach__one">
+                <h4>Lee</h4>
+                <p>
+                  A long-standing business owner who has run a prestige car hire company for over
+                  19 years, bringing the operational side to how the community is run. He has traded
+                  Forex for around four years and traded the strategy very successfully himself
+                  before the two took Inner Edge global.
+                </p>
+                <ul class="coach__creds">
+                  <li>Business owner for over 19 years</li>
+                  <li>Four years trading Forex</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VALUE STACK =================
+         Replaces the old feature panels AND the separate pricing
+         card, which were listing the same 13 items twice. -->
+    <section class="section" id="included">
+      <div class="wrap wrap--mid">
+        <div class="head" data-reveal>
+          <h2 class="h2">What You're<br /><span class="grad">Actually Getting</span></h2>
+          <p class="lede">
+            Thirteen things in one membership. Open any of them to see what it actually is.
+          </p>
+        </div>
+
+        <div class="vs" data-reveal>
+          <div class="vs__glow" aria-hidden="true"></div>
+
+          <ul class="vs__list">
+            <li class="vs__item" tabindex="0">
+              <div class="vs__row">
+                <span class="vs__name">Proven Profitable FX Strategy</span>
+              </div>
+              <div class="vs__reveal"><div class="vs__revealInner">
+                <p class="vs__desc">The rules-based system the whole room trades. You learn the exact setup, the entry trigger, where the stop goes and how the target is chosen, so you can run it yourself instead of copying someone else's signals.</p>
+              </div></div>
+            </li>
+            <li class="vs__item" tabindex="0">
+              <div class="vs__row">
+                <span class="vs__name">TradingView Customisable / Indicator</span>
+              </div>
+              <div class="vs__reveal"><div class="vs__revealInner">
+                <p class="vs__desc">The IES Indicator loaded onto your own TradingView charts. It plots the bands, the moving averages and the setup conditions for you, and the inputs are yours to adjust to the pairs and timeframes you actually trade.</p>
+              </div></div>
+            </li>
+            <li class="vs__item" tabindex="0">
+              <div class="vs__row">
+                <span class="vs__name">Programmable Alerts</span>
+              </div>
+              <div class="vs__reveal"><div class="vs__revealInner">
+                <p class="vs__desc">Alerts you configure once on your own charts. TradingView then notifies you the moment the setup conditions appear, so you are not sat in front of price all session waiting for one to form.</p>
+              </div></div>
+            </li>
+            <li class="vs__item" tabindex="0">
+              <div class="vs__row">
+                <span class="vs__name">Trading Community Discord</span>
+              </div>
+              <div class="vs__reveal"><div class="vs__revealInner">
+                <p class="vs__desc">The private server. Channels for charts, daily news, breaking news, tools and tech help, plus voice rooms and live streams where members trade the session together in real time.</p>
+              </div></div>
+            </li>
+            <li class="vs__item" tabindex="0">
+              <div class="vs__row">
+                <span class="vs__name">Daily News</span>
+              </div>
+              <div class="vs__reveal"><div class="vs__revealInner">
+                <p class="vs__desc">A daily post covering the releases and price levels that matter for the session ahead, filtered down to what actually affects a scalper rather than a full macro report you have to wade through.</p>
+              </div></div>
+            </li>
+            <li class="vs__item" tabindex="0">
+              <div class="vs__row">
+                <span class="vs__name">Trading Journal</span>
+              </div>
+              <div class="vs__reveal"><div class="vs__revealInner">
+                <p class="vs__desc">A journal built around this strategy. You log the entry, the exit, how well the setup graded and what you got wrong, in a consistent format, so the patterns in your own results become impossible to miss.</p>
+              </div></div>
+            </li>
+            <li class="vs__item" tabindex="0">
+              <div class="vs__row">
+                <span class="vs__name">LIVE Community Training Calls Weekly</span>
+              </div>
+              <div class="vs__reveal"><div class="vs__revealInner">
+                <p class="vs__desc">A live call every week. Charts get reviewed in real time, questions get answered on the spot, and the recording lands in the library afterwards if you cannot make it.</p>
+              </div></div>
+            </li>
+            <li class="vs__item" tabindex="0">
+              <div class="vs__row">
+                <span class="vs__name">DAILY Trade analysis &amp; Feedback / Questions Answered</span>
+              </div>
+              <div class="vs__reveal"><div class="vs__revealInner">
+                <p class="vs__desc">Post a trade in the Discord and get it broken down: what was right, what was wrong, and what to do differently next time. Every day, not only on call days.</p>
+              </div></div>
+            </li>
+            <li class="vs__item" tabindex="0">
+              <div class="vs__row">
+                <span class="vs__name">Personal Trading Journal Reviews</span>
+              </div>
+              <div class="vs__reveal"><div class="vs__revealInner">
+                <p class="vs__desc">One to one review of your journal. Someone experienced reads what you have actually been doing and tells you where the money is leaking, rather than leaving you to guess at it alone.</p>
+              </div></div>
+            </li>
+            <li class="vs__item" tabindex="0">
+              <div class="vs__row">
+                <span class="vs__name">Video Library of Previous Trainings</span>
+              </div>
+              <div class="vs__reveal"><div class="vs__revealInner">
+                <p class="vs__desc">Every past training session, recorded and organised by topic. Join today and the whole back catalogue opens up immediately, so joining late costs you nothing.</p>
+              </div></div>
+            </li>
+            <li class="vs__item" tabindex="0">
+              <div class="vs__row">
+                <span class="vs__name">Tech Trainings &amp; Setups</span>
+              </div>
+              <div class="vs__reveal"><div class="vs__revealInner">
+                <p class="vs__desc">Walkthroughs for getting your tools right: TradingView layout, loading the indicator, wiring up alerts, and your execution setup, so the platform is never the reason a trade goes wrong.</p>
+              </div></div>
+            </li>
+            <li class="vs__item" tabindex="0">
+              <div class="vs__row">
+                <span class="vs__name">Mindset Coaching from NLP Master Trainer / Paralympian</span>
+              </div>
+              <div class="vs__reveal"><div class="vs__revealInner">
+                <p class="vs__desc">The psychological side, which is where most traders actually lose. Discipline, sizing fear, handling a losing run and trading on tilt, worked through with a qualified NLP Master Trainer and Paralympian.</p>
+              </div></div>
+            </li>
+            <li class="vs__item" tabindex="0">
+              <div class="vs__row">
+                <span class="vs__name">In Real Life Meet Ups</span>
+              </div>
+              <div class="vs__reveal"><div class="vs__revealInner">
+                <p class="vs__desc">Members meet in person through the year. Trade together, learn together, and put faces to the people you have been talking to in the room every day.</p>
+              </div></div>
+            </li>
+          </ul>
+
+          <div class="vs__pay" id="pricing">
+            <p class="vs__pay-label">All of it, one membership</p>
+            <div class="vs__amount">
+              <span class="vs__cur">$</span><span class="vs__num">77</span><span class="vs__per">/MO</span>
+            </div>
+            <a class="btn btn--lg" href="#">
+              Join Inner Edge Scalping
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M13.5 4.5 21 12l-7.5 7.5-1.42-1.41L17.17 13H3v-2h14.17l-5.09-5.09z"/></svg>
+            </a>
+            <p class="vs__fine">Instant access &middot; No contract &middot; Cancel anytime</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FAQ ================= -->
+    <section class="section" id="faq">
+      <div class="wrap wrap--narrow">
+        <div class="head" data-reveal>
+          <p class="eyebrow">Questions</p>
+          <h2 class="h2">Before <span class="grad">You Join</span></h2>
+        </div>
+
+        <div class="faq" data-reveal>
+          <details>
+            <summary>Do you guarantee I will make money?</summary>
+            <p>No, and be careful of anyone in this industry who does. Trading carries real risk and the majority of retail traders lose money. What a membership gets you is a defined strategy, the tools to run it, structured training and people who trade it every session. What you do with that is down to your own discipline, risk management and execution.</p>
+          </details>
+          <details>
+            <summary>Is this financial advice?</summary>
+            <p>No. Everything here is educational. We do not manage money, place trades on your behalf, or tell you what to buy or sell. Nothing on this site or in the community should be treated as a personal recommendation. If you need advice about your own circumstances, speak to a regulated financial adviser.</p>
+          </details>
+          <details>
+            <summary>What returns should I expect?</summary>
+            <p>We do not publish return targets, because any honest answer depends on your account size, your risk per trade, how consistently you follow the rules and what the market is doing. Anyone promising you a monthly percentage is guessing or selling.</p>
+          </details>
+          <details>
+            <summary>Do I need experience to start?</summary>
+            <p>No. The course starts at the foundations and the Trading Tools and Setup module walks you through getting your platform working before you place anything. Start on a demo account, which is exactly what the first tool lesson covers.</p>
+          </details>
+          <details>
+            <summary>What do I need to trade this?</summary>
+            <p>A TradingView account for charting and a broker account on MetaTrader 5 or TradeLocker for execution. The setup lessons walk through both, including opening a free demo account first.</p>
+          </details>
+          <details>
+            <summary>How much time does this take each day?</summary>
+            <p>It is a scalping strategy, so it is session based rather than all day. Programmable alerts mean you are not watching charts waiting for a setup to appear.</p>
+          </details>
+          <details>
+            <summary>Do I need a large account to start?</summary>
+            <p>No, and you should not start with real money at all until the strategy is working on demo. The Prop Firm Strategy module also covers trading funded capital, which is an option once you can trade consistently.</p>
+          </details>
+          <details>
+            <summary>Can I cancel?</summary>
+            <p>Yes. It is $77 per month and you can cancel at any time. You keep access for the period you have paid for.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FINAL CTA ================= -->
+    <section class="cta">
+      <div class="wrap cta__inner" data-reveal>
+        <h2 class="h2">Your Edge Is Waiting</h2>
+        <p class="lede">Join the traders already running the strategy every session.</p>
+        <a class="btn btn--lg" href="#pricing">
+          Get Instant Access for $77
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M13.5 4.5 21 12l-7.5 7.5-1.42-1.41L17.17 13H3v-2h14.17l-5.09-5.09z"/></svg>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap foot__inner">
+      <div class="foot__brand">
+        <p class="foot__mark">Inner Edge <span class="grad">Scalping</span></p>
+        <p class="foot__tag">Trade With Precision. Win With Edge.</p>
+      </div>
+
+      <nav class="foot__nav" aria-label="Footer">
+        <a href="#room">The Discord</a>
+        <a href="#curriculum">Curriculum</a>
+        <a href="#coaches">Coaches</a>
+        <a href="#included">What's Included</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+
+      <p class="foot__disc">
+        Trading involves risk and the majority of retail traders lose money. Past performance is not
+        indicative of future results. Nothing on this site is financial advice or a personal
+        recommendation. Educational content only.
+      </p>
+      <p class="foot__copy">&copy; <span data-year></span> Inner Edge Scalping. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js" defer></script>
+</body>
+</html>
