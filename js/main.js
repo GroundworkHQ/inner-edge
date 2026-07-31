@@ -48,23 +48,25 @@
        new range. Cycling through those is what gives the background
        its trending shape instead of an even wander. */
     var regLeft = 0, regDrift = 0, regVol = 1;
+    var flatCool = 0;   // bars to let a forced trend run before re-checking
 
     function nextRegime() {
       var r = Math.random();
       var dir = Math.random() < 0.5 ? -1 : 1;
 
-      if (r < 0.44) {            // sustained trend leg
+      if (r < 0.50) {            // sustained trend leg
         regLeft = 70 + Math.floor(Math.random() * 100);
-        regDrift = dir * (0.0022 + Math.random() * 0.0040);
-        regVol = 0.8 + Math.random() * 0.5;
-      } else if (r < 0.60) {     // sharp impulse / capitulation
+        regDrift = dir * (0.0024 + Math.random() * 0.0042);
+        regVol = 0.9 + Math.random() * 0.5;
+      } else if (r < 0.74) {     // sharp impulse / capitulation
         regLeft = 8 + Math.floor(Math.random() * 15);
         regDrift = dir * (0.009 + Math.random() * 0.013);
         regVol = 1.7 + Math.random() * 1.0;
-      } else {                   // consolidation / chop
-        regLeft = 50 + Math.floor(Math.random() * 80);
-        regDrift = (Math.random() - 0.5) * 0.0007;
-        regVol = 0.40 + Math.random() * 0.35;
+      } else {                   // consolidation: shorter and livelier, so a
+                                 // quiet stretch never fills the whole screen
+        regLeft = 20 + Math.floor(Math.random() * 30);
+        regDrift = (Math.random() - 0.5) * 0.0018;
+        regVol = 0.64 + Math.random() * 0.38;
       }
     }
     nextRegime();
@@ -76,7 +78,7 @@
       if (price > 0.85 && regDrift > 0) regDrift = -Math.abs(regDrift);
       if (price < 0.15 && regDrift < 0) regDrift = Math.abs(regDrift);
 
-      var shock = (Math.random() - 0.5) * 0.030 * regVol;
+      var shock = (Math.random() - 0.5) * 0.034 * regVol;
       var open = price;
       price = Math.max(0.07, Math.min(0.93, price + shock + regDrift));
       var close = price;
@@ -381,6 +383,20 @@
         offset -= PITCH;
         pushCandle();
         candles.shift();
+
+        /* Regimes are random, so a run of quiet ones can leave the whole
+           visible window flat. Rather than hope, measure: if the on-screen
+           range collapses, force a trend leg pointed back toward the middle.
+           The cooldown matters: without it this re-fires every bar and keeps
+           flipping direction, which pins price in a tight oscillation and
+           produces exactly the flatness it was meant to prevent. */
+        if (flatCool > 0) flatCool--;
+        else if (spread() < 0.34) {
+          regLeft = 90 + Math.floor(Math.random() * 70);
+          regDrift = (price > 0.5 ? -1 : 1) * (0.0045 + Math.random() * 0.0035);
+          regVol = 1.0 + Math.random() * 0.5;
+          flatCool = regLeft;
+        }
       }
       draw();
       requestAnimationFrame(tick);
