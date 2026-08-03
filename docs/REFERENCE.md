@@ -5,7 +5,7 @@
 ## 1. Overview
 **Inner Edge Scalping** — a **Forex** (FX) scalping education community run by **Wendy & Lee**, sold as one membership at **$77/mo**.
 
-⚠️ **Miguel's global CLAUDE.md calls this a "futures trading education community." That looks wrong.** Everything in the actual product is FX: the course teaches an FX strategy, charts are CADCHF on OANDA, execution is MT5 / TradeLocker. Worth correcting at the source. Flagged 2026-07-30, not yet confirmed with Miguel.
+**This is Forex, not futures.** Miguel's global CLAUDE.md previously called it a "futures trading education community"; confirmed wrong and corrected at the source on 2026-08-03. Everything in the actual product is FX: the course teaches an FX strategy, charts are CADCHF on OANDA, execution is MT5 / TradeLocker.
 
 **This is a fresh restart (2026-07-30).** The prior build (`ies-platform`) was fully deleted — local dir, GitHub repo, Vercel project and Supabase tables all confirmed gone. Nothing carries over; re-verify any assumption from the old build.
 
@@ -103,7 +103,7 @@ Their real tagline **"Trade With Precision. Win With Edge."** is now the hero H1
 - Screenshot capture from the browser extension **fails past ~5000px scroll depth** on this page (fixed canvas + stacked `backdrop-filter`). The page is fine; verify deep sections by measuring the DOM instead.
 
 ## 7. Open decisions
-- **Futures vs Forex** in the global CLAUDE.md (see §1).
+- ~~Futures vs Forex in the global CLAUDE.md~~ — resolved 2026-08-03, it's Forex (see §1).
 - Whether to keep the "proven profitable" language in the hero.
 - Full-platform stack, once the sales page is signed off.
 - Real domain: `inneredgescalping.com` is theirs and already hosts `members.` — the miguelloza.com URL is only a preview.
