@@ -531,7 +531,6 @@
     var dcTopic = document.getElementById("dcTopic");
 
     function post(text) { return { text: text }; }
-    var LOCK = "locked";
     var VOICE = "voice";
 
     var CHANNELS = {
@@ -551,9 +550,11 @@
         ]
       },
       "charts-and-chat": {
-        topic: "Post your charts and trades, get them broken down.",
-        state: LOCK,
-        blurb: "Members post setups and completed trades here every session and get them reviewed."
+        topic: "Celebrate your trading wins, funded accounts, consistency milestones, and personal achievements. Positive vibes only!",
+        msgs: [
+          post("Passed a challenge, hit a consistency milestone, or just had a clean week? Post it here."),
+          post("Wins get celebrated in here, big or small. Bring the chart with it so everyone can see how it was taken.")
+        ]
       },
       "daily-news": {
         topic: "What moves price today, filtered for scalpers.",
@@ -570,13 +571,17 @@
       },
       "general-chat": {
         topic: "Everything else. The room outside the charts.",
-        state: LOCK,
-        blurb: "Where the community actually talks. Open to members."
+        msgs: [
+          post("Anything off topic lives here so the trading channels stay clean."),
+          post("New in? Say hello. Most people here started exactly where you are.")
+        ]
       },
       "tech-talk": {
         topic: "Platform, indicator and setup help.",
-        state: LOCK,
-        blurb: "Stuck on MT5, TradingView or the IES Indicator? This is where it gets sorted."
+        msgs: [
+          post("Stuck on MT5, TradingView, TradeLocker or the IES Indicator? Ask here rather than fighting it alone."),
+          post("Screenshot the actual error or the settings panel. It gets solved far quicker than a description.")
+        ]
       },
       "tuesday-tune-up": {
         topic: "Questions for the weekly live call.",
@@ -601,8 +606,10 @@
       },
       "feedback-and-suggestions": {
         topic: "Tell us what would make this better.",
-        state: LOCK,
-        blurb: "Members shape what gets built next."
+        msgs: [
+          post("Missing a lesson, a tool or a session time that would suit you better? Say so here."),
+          post("A lot of what is in the course now started as a request in this channel.")
+        ]
       },
       "server-support": {
         topic: "Access problems and account help.",
@@ -634,14 +641,12 @@
       dcTopic.textContent = c.topic;
 
       var html = "";
-      if (c.state === LOCK || c.state === VOICE) {
-        var icon = c.state === VOICE
-          ? '<path fill="currentColor" d="M12 3a7 7 0 0 0-7 7v4a3 3 0 0 0 3 3h1v-8H7v-1a5 5 0 0 1 10 0v1h-2v8h1a3 3 0 0 0 3-3v-4a7 7 0 0 0-7-7z"/>'
-          : '<path fill="currentColor" d="M17 9V7a5 5 0 0 0-10 0v2H5v12h14V9h-2zM9 7a3 3 0 0 1 6 0v2H9V7zm3 10a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/>';
+      if (c.state === VOICE) {
+        var icon = '<path fill="currentColor" d="M12 3a7 7 0 0 0-7 7v4a3 3 0 0 0 3 3h1v-8H7v-1a5 5 0 0 1 10 0v1h-2v8h1a3 3 0 0 0 3-3v-4a7 7 0 0 0-7-7z"/>';
         html =
           '<div class="dc__state">' +
             '<svg viewBox="0 0 24 24" aria-hidden="true">' + icon + "</svg>" +
-            "<p><b>" + (c.state === VOICE ? "Voice channel" : "Members only") + "</b></p>" +
+            "<p><b>Voice channel</b></p>" +
             "<p>" + c.blurb + "</p>" +
           "</div>";
       } else {

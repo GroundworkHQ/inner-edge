@@ -165,8 +165,8 @@ main, .nav, .foot { position: relative; z-index: 3; }
 .btn--sm { padding: .6rem 1.15rem; font-size: .86rem; }
 .btn--block { width: 100%; }
 .btn--ghost {
-  background: rgba(255,255,255,.03);
-  border-color: var(--line-2);
+  background: rgba(255,255,255,.065);
+  border-color: rgba(120,170,235,.45);
   color: var(--chrome);
   box-shadow: none;
   backdrop-filter: blur(6px);
@@ -266,25 +266,26 @@ main, .nav, .foot { position: relative; z-index: 3; }
   margin: 1.7rem auto 0;
 }
 .hero__actions { display: flex; flex-wrap: wrap; gap: .9rem; justify-content: center; margin-top: 2.5rem; }
+/* Equal width so the pair reads as one deliberate unit rather than two
+   buttons sized by whatever their labels happened to be. */
+.hero__actions .btn { min-width: 16.5rem; }
 
+/* Deliberately NOT a pill. Dressed like the buttons above it, this read
+   as a third clickable control when it is only a statement of price. */
 .hero__price {
-  display: inline-flex; align-items: center; gap: .9rem; flex-wrap: wrap; justify-content: center;
-  margin-top: 2.1rem;
-  padding: .85rem 1.7rem;
-  border: 1px solid rgba(79,227,245,.42);
-  border-radius: 999px;
-  background: rgba(79,227,245,.08);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 0 46px -12px rgba(30,155,255,.85), inset 0 1px 0 rgba(255,255,255,.10);
+  display: inline-flex; align-items: baseline; gap: .55rem; flex-wrap: wrap; justify-content: center;
+  margin-top: 1.9rem;
+  padding: 0;
+  border: 0;
+  background: none;
 }
 .hero__price-num {
-  font-family: var(--f-mono); font-weight: 700; font-size: 1.9rem;
+  font-family: var(--f-mono); font-weight: 700; font-size: 1.35rem;
   color: var(--chrome);
-  text-shadow: 0 0 22px rgba(79,227,245,.55);
 }
-.hero__price-per { font-size: 1rem; color: var(--text); }
-.hero__price-sep { width: 1px; height: 22px; background: rgba(79,227,245,.35); }
-.hero__price-note { font-size: .98rem; font-weight: 600; color: var(--cyan); }
+.hero__price-per { font-size: .95rem; color: var(--muted); }
+.hero__price-sep { width: 1px; height: 13px; background: rgba(120,170,235,.35); align-self: center; }
+.hero__price-note { font-size: .95rem; color: var(--cyan); }
 
 /* ---------- Market sessions ---------- */
 .sessions {
@@ -490,11 +491,13 @@ main, .nav, .foot { position: relative; z-index: 3; }
 .coach__creds { display: grid; gap: .55rem; }
 .coach__creds li {
   display: flex; align-items: flex-start; gap: .65rem;
-  font-size: .9rem; color: var(--text);
+  font-size: .9rem; line-height: 1.45; color: var(--text);
+  /* balance stops a single word stranding on the second line */
+  text-wrap: balance;
 }
 .coach__creds li::before {
   content: ""; flex: none;
-  width: 6px; height: 6px; margin-top: .52rem; border-radius: 50%;
+  width: 6px; height: 6px; margin-top: .46rem; border-radius: 50%;
   background: linear-gradient(180deg, var(--cyan), var(--electric));
   box-shadow: 0 0 12px rgba(79,227,245,.9);
 }
@@ -514,19 +517,6 @@ main, .nav, .foot { position: relative; z-index: 3; }
   min-height: 470px;
 }
 
-/* interaction cue, kept out of the lede so that paragraph stays tight */
-.dc__hint {
-  display: flex; align-items: center; justify-content: center; gap: .45rem;
-  margin: 0 0 1rem;
-  font-family: var(--f-mono); font-size: .72rem;
-  letter-spacing: .14em; text-transform: uppercase;
-  color: var(--cyan);
-}
-.dc__hint svg { width: 13px; height: 13px; animation: nudge 1.8s ease-in-out infinite; }
-@keyframes nudge {
-  0%, 100% { transform: translateX(0); }
-  50%      { transform: translateX(3px); }
-}
 
 /* sidebar */
 .dc__side {
@@ -609,7 +599,8 @@ main, .nav, .foot { position: relative; z-index: 3; }
   min-width: 0;
 }
 .dc__hash { color: #5d6c82; font-weight: 700; }
-.dc__top strong { color: var(--chrome); font-size: .93rem; }
+/* name holds its line; the topic is the part allowed to truncate */
+.dc__top strong { color: var(--chrome); font-size: .93rem; white-space: nowrap; flex: none; }
 .dc__topic {
   color: var(--muted); font-size: .8rem;
   padding-left: .75rem; margin-left: .25rem;
@@ -724,18 +715,19 @@ main, .nav, .foot { position: relative; z-index: 3; }
 /* the payoff */
 .vs__pay {
   position: relative;
-  margin-top: 1.6rem; padding-top: 1.8rem;
+  margin-top: 2.2rem; padding-top: 2.4rem;
   border-top: 1px dashed rgba(130,175,235,.28);
   text-align: center;
 }
 .vs__pay-label {
-  margin: 0 0 .5rem;
+  margin: 0 0 1rem;
   font-family: var(--f-mono);
   font-size: .72rem; letter-spacing: .2em; text-transform: uppercase;
   color: var(--cyan);
 }
 .vs__amount {
   display: flex; align-items: flex-start; justify-content: center; gap: .1rem;
+  margin-bottom: 2rem;
   font-family: var(--f-mono); color: var(--chrome); line-height: 1;
 }
 .vs__cur { font-size: 1.8rem; font-weight: 700; margin-top: .5rem; }
@@ -746,7 +738,7 @@ main, .nav, .foot { position: relative; z-index: 3; }
 
 
 .vs__fine {
-  margin: 1rem 0 0;
+  margin: 1.5rem 0 0;
   font-family: var(--f-mono); font-size: .74rem; letter-spacing: .06em;
   color: #5f6f86;
 }
