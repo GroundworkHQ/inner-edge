@@ -73,7 +73,7 @@ Eight questions including the hard ones, answered honestly: no income guarantee 
 
 ## 5. What's next
 **Blocking before sharing widely:**
-1. **CTAs go nowhere** — every Join button is `href="#"`. Needs the real checkout link.
+1. ~~CTAs go nowhere~~ — resolved 2026-08-03. The one dead `href="#"` (the value-stack Join button) now points at **https://inneredgescalping.com/joinies**, which 301s to their offer page on `members.inneredgescalping.com`. Every other CTA is an in-page `#pricing` jump to that button, which is deliberate.
 2. **Wendy & Lee have not approved the page**, but it's publicly live with their photo, bios and full curriculum.
 
 **Content gaps:**
