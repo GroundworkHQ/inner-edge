@@ -73,7 +73,7 @@ Eight questions including the hard ones, answered honestly: no income guarantee 
 
 ## 5. What's next
 **Blocking before sharing widely:**
-1. ~~CTAs go nowhere~~ — resolved 2026-08-03. **All four CTAs** (nav "Join Now", hero "Get Instant Access", value-stack Join, final "Get Instant Access for $77") point at **https://inneredgescalping.com/joinies**, which redirects to their offer page on `members.inneredgescalping.com`. The two "Pricing" links in the nav and footer stay as in-page `#pricing` jumps, since those are navigation not CTAs.
+1. ~~CTAs go nowhere~~ — resolved 2026-08-03. **Every "Pricing" / "Join" / "Get Instant Access" link on the page** (6 total: nav "Pricing" and "Join Now", hero, value-stack Join, final CTA, footer "Pricing") points at **https://inneredgescalping.com/joinies**, which redirects to their offer page on `members.inneredgescalping.com`. Miguel's call to send the nav and footer "Pricing" links off-site too, not just the buttons. Note this leaves `id="pricing"` on `.vs__pay` with nothing linking to it, and there is no longer any in-page route to the price.
 2. **Wendy & Lee have not approved the page**, but it's publicly live with their photo, bios and full curriculum.
 
 **Content gaps:**
