@@ -4,7 +4,7 @@
 Before working, read **`docs/REFERENCE.md`** — the source of truth for this project. This file is just the quick orientation.
 
 ## What this is
-Fresh restart of the Inner Edge Scalping platform (futures trading education community). The prior attempt (`ies-platform`) was fully deleted — local, GitHub, Vercel, Supabase all confirmed gone — this is a clean start, not a continuation.
+Fresh restart of the Inner Edge Scalping platform (**Forex** scalping education community, not futures). The prior attempt (`ies-platform`) was fully deleted — local, GitHub, Vercel, Supabase all confirmed gone — this is a clean start, not a continuation.
 
 ## Stack
 TBD — deliberately deferred. Full-platform stack (framework/DB/auth/payments/etc.) will be decided later; not settled yet, don't assume the old plan carries over.

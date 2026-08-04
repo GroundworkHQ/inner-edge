@@ -15,7 +15,7 @@
 - **This site:** plain static HTML/CSS/JS. No framework, no build step, no dependencies. `index.html` + `css/styles.css` + `js/main.js` + `assets/`.
 - **Hosting:** GitHub Pages on `GroundworkHQ/inner-edge` (public), proxied to **https://miguelloza.com/inner-edge/** by a rewrite in `miguelloza-forwards/vercel.json`. Push here → live in ~30s. No file sync, no `<base href>`. See the `apex-site-flow` memory note, or run `/publish inner-edge`.
 - **Full-platform stack: still TBD.** Not decided.
-- **Their existing systems** (not built by us): course platform at `members.inneredgescalping.com`, private Discord server, TradingView (the "IES Indicator"), MT5 / TradeLocker, FTMO for prop funding.
+- **Their existing systems** (not built by us): course platform at `members.inneredgescalping.com`, private Discord server, TradingView (the "IES Indicator"), MT5 / TradeLocker, FTMO for prop funding, and a **GoHighLevel sub-account** that is the actual CRM (see §8).
 - Local preview: `python3 -m http.server 8080` from repo root.
 
 ## 3. Architecture
@@ -107,3 +107,44 @@ Their real tagline **"Trade With Precision. Win With Edge."** is now the hero H1
 - Whether to keep the "proven profitable" language in the hero.
 - Full-platform stack, once the sales page is signed off.
 - Real domain: `inneredgescalping.com` is theirs and already hosts `members.` — the miguelloza.com URL is only a preview.
+
+## 8. GoHighLevel CRM
+Discovered 2026-08-04 when the official HighLevel MCP was wired into Claude Code. **The `highlevel` MCP server is bound to this sub-account and no other** — every operation it runs hits Inner Edge Scalping. Verified with `list_locations` + `get-location`. See the `reference_highlevel-mcp` memory note for the server setup itself.
+
+### Sub-account
+| | |
+|---|---|
+| Name | Inner Edge Scalping |
+| Location ID | `06KFUoalbbFOPinVxNeY` |
+| Company (agency) ID | `uDnUWn0Id47pe3f98hdL` |
+| Created | 2026-02-25 |
+| Website on file | `https://inneredgescalping.com` |
+| Account email | `team.inneredge@gmail.com` |
+| Address / timezone | 11 Kingsway, Colchester, Essex CO5 0LS, GB / Europe/London |
+| SaaS mode | `setup_pending` (Stripe customer `cus_U5ZSJSqpJafpvI`, Twilio rebilling disabled) |
+
+**Users (3):** Miguel Loza (`team.inneredge@gmail.com`, **admin**), Wendy Smith (`coachwend72@gmail.com`, user), **Lee Saunders** (`leeisfx@gmail.com`, user). Lee's surname was unknown until now; the site only ever says "Lee". Don't change site copy over this — see §6.
+
+### Contacts — 111 total (2026-08-04)
+Roughly what's in there, from a full two-page pull:
+
+- **Every record is `type: lead`.** Nothing is marked customer/won, no opportunities and no populated custom fields anywhere. The CRM is a list, not a pipeline — treat any "member vs churned" read as inferred from tags, not from state.
+- **Tags:** `skool-migrant` 61, `cc` 11 (Coaching Corner), `ies-cancellation` 10, `ies-member` 2, `1:1` 1. **42 contacts carry no tag at all.**
+  - ⚠️ `ies-member` is on **Wendy and Lee only**. It does not mark paying members. Do not use it as a member count.
+- **Source:** `membership` 60, none 37, `payment_link` 8, "Coaching Corner 1:1" variants 6.
+- **Signup shape:** 62 of 111 landed in March 2026 — that's the Skool → GHL migration, a CSV import (`attributionSource: {sessionSource: "CRM UI", medium: "csv_import"}`). The remaining ~49 trickled in Apr–Aug, so organic adds run roughly 10/month.
+- **Geography:** GB 55, US 24, IE 1, 20 unset. UK-majority audience, which matters for the FCA question in §5.
+- **Phone numbers on ~15 of 111.** Email is effectively the only channel; any SMS/voice plan is dead on arrival without a collection step first.
+- **Assignment:** Lee 12, Wendy 2, 97 unassigned. Assignment appears to happen only on Coaching Corner bookings.
+- Test/system records are mixed in with real ones (`intercom@goforclose.com`, `jojjy@mailinator.com`, an "Admin Email" contact, Miguel's own two addresses, family). Any count taken raw is inflated by ~6.
+- At least three people exist as duplicate contacts under different addresses (e.g. Jayden Adams x3, Sid O x2, Brandon Roberti x2). `allowDuplicateContact` is `false` but dedupe keys on email+phone, so a second address makes a second person.
+
+### How money actually reaches them
+Attribution on the booked contacts shows the real path, which is **not** the sales page:
+`GHL calendar widget (api.leadconnectorhq.com/widget/booking/…)` → `buy.stripe.com` / `book.stripe.com` payment link, with some traffic through `link.fastpaydirect.com`. Calendar IDs seen: `xZfRi7H03O5qpvplLinH` (Coaching Corner 1:1), `kKVFqVYupYumqADzHPth`, `HqZvVYe5r7yuFaylZ6cn`, plus Wendy's personal calendar `V9DkRCtI48rKOcDXBAnj`. Recurring membership billing is separate and lives on `members.inneredgescalping.com`.
+
+### What this changes
+- **The social-proof gap in §5 is now measurable, not just missing.** ~105 real contacts and 10 tagged cancellations exist. Retention/churn numbers could be pulled, but only via the members platform and Stripe — GHL alone can't tell you who is currently paying.
+- **`ies-cancellation` is the only churn signal in here** and it's manual, so it's a floor, not a rate.
+- ⚠️ **Read-only in practice, by choice.** The MCP grant is a fixed read **+ write** bundle (no read-only option), and this is a live client CRM with 100+ real people in it. Do not create, update, tag or delete contacts, and never trigger a workflow or send from it, without Miguel saying so for that specific action.
+- ⚠️ **Never export the contact list into a repo, artifact or shared doc.** Names, emails and phone numbers of UK residents — GDPR applies, and it's Wendy & Lee's data, not ours.
