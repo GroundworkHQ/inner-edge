@@ -18,6 +18,18 @@
 - **Their existing systems** (not built by us): course platform at `members.inneredgescalping.com`, private Discord server, TradingView (the "IES Indicator"), MT5 / TradeLocker, FTMO for prop funding, and a **GoHighLevel sub-account** that is the actual CRM (see §8).
 - Local preview: `python3 -m http.server 8080` from repo root.
 
+### Branching
+**On Pages, `main` is production.** A push to `main` is a deploy, so "back up my work" and "publish this" are the same action there. Keep them apart:
+
+- **Shippable work goes straight to `main`.** Fix, commit, push, live in ~30s.
+- **Work that is not ready goes on a branch.** Commit and push it as often as you like; Pages only builds `main`, so a pushed branch deploys nothing. Merge to `main` when it is signed off, and that merge is the moment it goes live.
+
+Solo project, so **no PRs and no review step**. Merge directly.
+
+⚠️ **The repo is public.** Anything pushed to any branch is publicly readable straight away, even when it is not rendered on the live page. Check member names, account numbers and personal data before pushing, not just before merging.
+
+Live at the time of writing: `wins-wall` holds the unfinished social proof section (§4).
+
 ## 3. Architecture
 Single page, top to bottom: hero → market session bar → Discord → curriculum → coaches → value stack + price → FAQ → final CTA → footer.
 
