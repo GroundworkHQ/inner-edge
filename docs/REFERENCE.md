@@ -55,6 +55,28 @@ Their real server **rebuilt in markup, not screenshotted.** The original screens
 
 **Team/admin channels show announcement-style posts; member-conversation channels show a "Members only" lock instead.** Inventing member chatter would be fabricated social proof — deliberately not done.
 
+### Wins wall (social proof) — added 2026-08-14
+Section `#wins`, between coaches and curriculum. Two distinct blocks, and the difference between them matters:
+
+- **`WINS`** (js §7) — real member messages, **verbatim**, rendered as Discord-flavoured cards. Currently one entry: Matty K., Jul 2026.
+- **`MILESTONES`** — proof we hold with **no message attached**. Phrased as our statement of fact, never as a quote, because the member never said it. Currently one entry: Lee B., prop firm stage two, Aug 2026.
+
+⚠️ **Never turn a milestone into a quote.** Lee B. sent a certificate, not a sentence. Writing a testimonial for him would be exactly the fabrication this page has refused everywhere else.
+
+**The section renders nothing and stays `hidden` while `WINS` is empty**, so a stub can never ship to the live page.
+
+**Source material was two screenshots, and neither is published as an image.** Rebuilt in markup instead, same call as the Discord section (§4) and for the same class of reason:
+- Matty's Discord post embedded a screenshot of his **prop firm email**, which showed his full legal name ("Matthew Kettle") and a **KYC link**. Same shape as the Zoom-link incident.
+- Lee's certificate carried the **issuer's logo and the Managing Director's handwritten signature**. Republishing a third party's signature on a client sales page is a worse problem than the name on it.
+
+**Naming: full name by default, abbreviated only on request.** Miguel's call on 2026-08-14. Matty Kettle is named in full with permission; **Lee Baldwin is `Lee B.` because he specifically asked**. A uniform first-name-plus-initial rule was proposed and rejected, so the inconsistency is deliberate, not an oversight. Do not "tidy" it by abbreviating both.
+
+⚠️ **`Lee B.` collides with coach Lee Saunders.** Unresolved. On the same page it can read as the coach endorsing himself.
+
+**Prop firm named generically** ("a prop firm") rather than as Alpha Capital, since nobody has asked them for permission to use their brand.
+
+A risk note sits under the section: individual results, trading carries risk, no promise of earnings.
+
 ### Curriculum
 Six modules with the **real lesson names**, read from a PDF export of their course (needed `brew install poppler` to render). Counts: 7 / 4 / 6 / 9 / 4 = **30 core lessons**, module 06 (Live Trade Breakdowns) grows weekly.
 
@@ -77,7 +99,9 @@ Eight questions including the hard ones, answered honestly: no income guarantee 
 2. **Wendy & Lee have not approved the page**, but it's publicly live with their photo, bios and full curriculum.
 
 **Content gaps:**
-3. **Zero social proof.** No testimonials, member count or results. Biggest conversion gap; Miguel is working on it.
+3. **Social proof — started 2026-08-14, not yet enough to ship.** The `#wins` section exists and renders, but on **one message and one milestone**. One card centred under a full-width heading reads as thin, which is worse than no section at all. Target 5-6 messages before this goes live. Still the biggest conversion gap.
+   - Permission confirmed for both: **Matty Kettle in full**, **Lee B. abbreviated at his request**.
+   - **Waiting on one asset:** the original of the prop firm pass email Matty posted, cropped to the achievement. The copy embedded in the Discord post is a ~145x315 thumbnail and is illegible at display size, so it needs the original upload. Until it arrives his card is quote + badge, which is a fine state to ship.
 4. **The core claim is unproven.** "Proven Profitable FX Strategy" is asserted, never demonstrated — no equity curve, win rate, or verified track record (Myfxbook/FX Blue). In this niche that's *the* objection.
 5. **Refund and trial policy unknown** — two FAQ entries deliberately not written rather than invented.
 6. Module 06's lesson count is inferred (55 − 30); confirm.
@@ -98,6 +122,7 @@ Their real tagline **"Trade With Precision. Win With Edge."** is now the hero H1
 - **No em dashes in site copy.** Verified zero on the rendered page. The source bio had one; it was rewritten.
 - **`text-wrap: balance`** on headings/ledes/short paragraphs, so a one-word orphan on the last line doesn't recur as copy changes.
 - **Never fabricate** testimonials, member numbers, results, prices or credentials.
+- **Members are named in full where they have agreed, abbreviated where they asked.** Messages are quoted verbatim including typos. Before publishing any member image, check what else is in the frame: full legal names, account numbers, balances, KYC or onboarding links, third-party signatures.
 - **Keep client-supplied copy verbatim** (the 13 value-stack items, module names, tagline). Ask before rewording.
 - Accessibility: `<details>` for FAQ/curriculum (keyboard-native), value-stack rows focusable with `:focus-visible` matching hover, nav uses `visibility:hidden` while hidden so it leaves the tab order.
 - Screenshot capture from the browser extension **fails past ~5000px scroll depth** on this page (fixed canvas + stacked `backdrop-filter`). The page is fine; verify deep sections by measuring the DOM instead.

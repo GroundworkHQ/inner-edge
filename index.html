@@ -230,6 +230,40 @@
       </div>
     </section>
 
+    <!-- ================= WINS / SOCIAL PROOF =================
+         Real member messages lifted from the Discord, rebuilt in markup.
+         Content lives in the WINS array in js/main.js §7. The section stays
+         hidden until that array has real entries in it, so an empty shell
+         never ships. Never write a message that a member did not post. -->
+    <section class="section" id="wins" hidden>
+      <div class="wrap">
+        <div class="head" data-reveal>
+          <p class="eyebrow"><span class="dot"></span> From The Room</p>
+          <h2 class="h2">What Members<br /><span class="grad">Are Posting</span></h2>
+          <p class="lede">
+            Messages from the Inner Edge Discord, posted by members in
+            #charts-and-chat. Shared with permission, word for word.
+          </p>
+        </div>
+
+        <div class="wins" id="winsGrid" data-reveal></div>
+
+        <!-- Milestones are statements of fact about a member's result, used
+             when we hold proof but no message from them. Never phrase one as
+             a quote, because they did not say it. -->
+        <div class="miles" id="winsMiles" data-reveal hidden>
+          <p class="miles__cap">Recent member milestones</p>
+          <ul class="miles__list" id="winsMilesList"></ul>
+        </div>
+
+        <p class="wins__note" data-reveal>
+          These are individual members describing their own results. Trading carries
+          risk, results differ from person to person, and nothing here is a promise
+          that you will earn anything.
+        </p>
+      </div>
+    </section>
+
     <!-- ================= CURRICULUM ================= -->
     <section class="section" id="curriculum">
       <div class="wrap wrap--mid">
