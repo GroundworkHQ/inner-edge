@@ -74,7 +74,7 @@ Eight questions including the hard ones, answered honestly: no income guarantee 
 ## 5. What's next
 **Blocking before sharing widely:**
 1. ~~CTAs go nowhere~~ — resolved 2026-08-03. **Every "Pricing" / "Join" / "Get Instant Access" link on the page** (6 total: nav "Pricing" and "Join Now", hero, value-stack Join, final CTA, footer "Pricing") points at **https://inneredgescalping.com/joinies**, which redirects to their offer page on `members.inneredgescalping.com`. Miguel's call to send the nav and footer "Pricing" links off-site too, not just the buttons. Note this leaves `id="pricing"` on `.vs__pay` with nothing linking to it, and there is no longer any in-page route to the price.
-2. **Wendy & Lee have not approved the page**, but it's publicly live with their photo, bios and full curriculum.
+2. ~~Wendy & Lee have not approved the page~~ — **resolved 2026-08-14, they have signed off.** Note the sign-off covers the page as it stands on `main`. The social proof section (§4, branch `wins-wall`) is **not** part of it and is still unapproved and unfinished.
 
 **Content gaps:**
 3. **Zero social proof.** No testimonials, member count or results. Biggest conversion gap; Miguel is working on it.
@@ -148,3 +148,40 @@ Attribution on the booked contacts shows the real path, which is **not** the sal
 - **`ies-cancellation` is the only churn signal in here** and it's manual, so it's a floor, not a rate.
 - ⚠️ **Read-only in practice, by choice.** The MCP grant is a fixed read **+ write** bundle (no read-only option), and this is a live client CRM with 100+ real people in it. Do not create, update, tag or delete contacts, and never trigger a workflow or send from it, without Miguel saying so for that specific action.
 - ⚠️ **Never export the contact list into a repo, artifact or shared doc.** Names, emails and phone numbers of UK residents — GDPR applies, and it's Wendy & Lee's data, not ours.
+
+## 9. Apex domain migration (inneredgescalping.com)
+
+**Status: built on branch `apex-domain`, no DNS moved yet.** Miguel owns the domain and is the only person who edits it. Wendy & Lee do not use the GHL redirect panel, and GHL is not the long-term home, so the redirects were moved into this repo rather than left there.
+
+### Where the domain stood before
+Namecheap DNS. Three hostnames, all on GoHighLevel (`*.ludicrous.cloud`): apex, `www`, and `members`. **No MX, no TXT, no CAA** — the domain carries no email, so there was nothing of that kind to break. The apex had no homepage at all; `/` was itself a redirect into a paid offer.
+
+### The redirects
+Pulled from GHL `fetch-redirects-list` on 2026-08-14 and regenerated into static files, never retyped by hand.
+
+| Path | Target |
+|---|---|
+| `/joinies` | members offer `fd60666b` — the 6 CTAs on the page use this |
+| `/join` | `tally.so/r/BzGL5e` |
+| `/coachingcorner` | `book.stripe.com/…bjW05` |
+| `/booking` | GHL calendar `xZfRi7H03O5qpvplLinH` |
+| `/groupcoaching` | `link.fastpaydirect.com/…5f01` |
+| `/JournalReview` | `forms.gle/LX94WqqdsDzhkutU6` |
+| `/CCJournalReview` | `forms.gle/RGxEuSnFN5jCYLhs6` |
+
+`/` is deliberately absent: that path is the site now. `/replay` was deleted from GHL on 2026-08-14 at Miguel's instruction and is **not** carried over.
+
+⚠️ **These are meta-refresh redirects, not 301s.** GitHub Pages cannot do server-side redirects. Each folder holds an `index.html` with a `<meta http-equiv="refresh">`, a `location.replace()` fallback and the site's `--void` background so the bounce does not flash white. `replace` rather than `href` keeps the hop out of session history so the back button behaves.
+
+⚠️ **Casing is handled in `404.html`, not by twin folders.** GHL matched paths case-insensitively; GitHub Pages does not; and **macOS is case-insensitive so the repo physically cannot hold `JournalReview/` and `journalreview/` as separate directories.** `404.html` therefore carries a lowercase lookup map and resolves any casing client-side before showing the 404. Folders use GHL's own casing. Verified against `/JOINIES`, `/joinIes`, `/CCJOURNALREVIEW` and trailing slashes.
+
+### DNS changes still to make (Namecheap)
+1. Apex `A` — replace `162.159.140.166` with GitHub's four: `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
+2. `www` `CNAME` — replace `sites.ludicrous.cloud` with `groundworkhq.github.io`
+3. ⚠️ **`members` CNAME must not be touched.** It points at `clientportal.ludicrous.cloud` and is the live course platform and billing.
+
+### Rollback
+**Leave the GHL redirects configured.** They go inert the moment the apex moves but are not deleted, so pointing the apex `A` record back at `162.159.140.166` restores the previous behaviour immediately. Do not tidy them up until this has been live and stable for a while.
+
+### Known side effect
+Adding `CNAME` makes GitHub Pages redirect `groundworkhq.github.io/inner-edge/` to the custom domain, which **breaks the `miguelloza.com/inner-edge/` preview** proxied from `miguelloza-forwards`. That preview becomes redundant once the site is on the real domain, but §2 and the `apex-site-flow` memory note both need updating when this ships.
