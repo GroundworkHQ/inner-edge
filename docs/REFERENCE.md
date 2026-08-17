@@ -13,10 +13,10 @@
 
 ## 2. Stack & accounts
 - **This site:** plain static HTML/CSS/JS. No framework, no build step, no dependencies. `index.html` + `css/styles.css` + `js/main.js` + `assets/`.
-- **Hosting today (preview):** GitHub Pages on `GroundworkHQ/inner-edge` (public), proxied to **https://miguelloza.com/inner-edge/** by a rewrite in `miguelloza-forwards/vercel.json`. Push here → live in ~30s. No file sync, no `<base href>`. See the `apex-site-flow` memory note, or run `/publish inner-edge`.
-- **Hosting for the real domain, live since 2026-08-17:** **Vercel**, project `inner-edge`, production branch `main`. See §9. The site moved onto Vercel so the legacy short links could be real server-side redirects. GitHub Pages still serves the repo underneath, because no `CNAME` is committed, so the `miguelloza.com/inner-edge/` preview above survived the cutover.
-- ⚠️ **Two public copies now exist**: `inneredgescalping.com` and `miguelloza.com/inner-edge/`. That was fine while the latter was the only URL, but it is duplicate content now. Retire the preview proxy rewrite in `miguelloza-forwards/vercel.json`, or accept it knowingly.
-- ⚠️ **This repo has no `CNAME` on purpose.** Adding one hands the custom domain to GitHub Pages and breaks both the preview proxy and the Vercel setup. The domain is attached on the Vercel side instead.
+- **Hosting, live since 2026-08-17:** **Vercel**, project `inner-edge` (`prj_XfdwqNVtloQOQ8S7rz8HhG24Nmdi`), production branch `main`, serving **https://inneredgescalping.com** and `www`. Push to `main` → deployed. See §9 for the cutover and the DNS.
+- **`miguelloza.com/inner-edge/` is retired**, removed from `miguelloza-forwards/vercel.json` on 2026-08-17 and **now 404s**. It was the pre-launch preview; once the real domain went live it was a second public copy of the same page. Do not restore it. Unfinished work goes to a `preview` branch instead, see below.
+- GitHub Pages still builds this repo at `groundworkhq.github.io/inner-edge/`, harmlessly, because no `CNAME` is committed. Nothing points at it.
+- ⚠️ **This repo has no `CNAME` on purpose.** Adding one hands the domain to GitHub Pages and breaks the Vercel setup. The domain is attached on the Vercel side.
 - **Full-platform stack: still TBD.** Not decided.
 - **Their existing systems** (not built by us): course platform at `members.inneredgescalping.com`, private Discord server, TradingView (the "IES Indicator"), MT5 / TradeLocker, FTMO for prop funding, and a **GoHighLevel sub-account** that is the actual CRM (see §8).
 - Local preview: `python3 -m http.server 8080` from repo root.
