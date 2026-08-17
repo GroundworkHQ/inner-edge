@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Page not found | Inner Edge Scalping</title>
 <link rel="icon" href="/assets/favicon-32.png" />
+<meta name="robots" content="noindex, nofollow" />
 <style>
   html, body { height: 100%; }
   body {
@@ -12,8 +13,11 @@
     font: 16px/1.65 Inter, system-ui, -apple-system, sans-serif;
     display: grid; place-items: center; text-align: center; padding: 1.5rem;
   }
-  h1 { font-size: 3rem; margin: 0 0 .4rem; color: #eaf2ff; letter-spacing: .02em; }
-  p  { margin: 0 0 1.6rem; color: #7c8ca6; }
+  h1 {
+    font-size: clamp(3rem, 12vw, 5rem); margin: 0 0 .3rem;
+    color: #eaf2ff; letter-spacing: .02em; line-height: 1;
+  }
+  p { margin: 0 0 1.6rem; color: #7c8ca6; }
   a.btn {
     display: inline-block; padding: .75rem 1.5rem; border-radius: 999px;
     background: #1e9bff; color: #fff; text-decoration: none; font-weight: 600;
@@ -26,24 +30,5 @@
   <p>That page does not exist.</p>
   <a class="btn" href="/">Back to Inner Edge Scalping</a>
 </main>
-<script>
-/* Case-insensitive fallback for the legacy GHL short links. Those matched
-   regardless of casing; GitHub Pages does not, so /JOINIES or /joinIes would
-   otherwise dead-end here. Resolve it client side before showing the 404. */
-(function () {
-  var MAP = {
-    "joinies": "https://members.inneredgescalping.com/courses/offers/fd60666b-13f5-4b7e-9e21-96ebb393cc4d",
-    "join": "https://tally.so/r/BzGL5e",
-    "coachingcorner": "https://book.stripe.com/aFa7sN5DL6q2fkC2XMbjW05",
-    "booking": "https://api.leadconnectorhq.com/widget/booking/xZfRi7H03O5qpvplLinH",
-    "groupcoaching": "https://link.fastpaydirect.com/payment-link/6a20a62d5a9093aac76c5f01",
-    "journalreview": "https://forms.gle/LX94WqqdsDzhkutU6",
-    "ccjournalreview": "https://forms.gle/RGxEuSnFN5jCYLhs6"
-};
-  var key = location.pathname.replace(/^\/+|\/+$/g, "").toLowerCase();
-  var target = MAP[key];
-  if (target) location.replace(target);
-})();
-</script>
 </body>
 </html>

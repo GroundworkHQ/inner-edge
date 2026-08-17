@@ -1,0 +1,42 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/:p([jJ][oO][iI][nN][iI][eE][sS])",
+      "destination": "https://members.inneredgescalping.com/courses/offers/fd60666b-13f5-4b7e-9e21-96ebb393cc4d",
+      "permanent": true
+    },
+    {
+      "source": "/:p([jJ][oO][iI][nN])",
+      "destination": "https://tally.so/r/BzGL5e",
+      "permanent": true
+    },
+    {
+      "source": "/:p([cC][oO][aA][cC][hH][iI][nN][gG][cC][oO][rR][nN][eE][rR])",
+      "destination": "https://book.stripe.com/aFa7sN5DL6q2fkC2XMbjW05",
+      "permanent": true
+    },
+    {
+      "source": "/:p([bB][oO][oO][kK][iI][nN][gG])",
+      "destination": "https://api.leadconnectorhq.com/widget/booking/xZfRi7H03O5qpvplLinH",
+      "permanent": true
+    },
+    {
+      "source": "/:p([gG][rR][oO][uU][pP][cC][oO][aA][cC][hH][iI][nN][gG])",
+      "destination": "https://link.fastpaydirect.com/payment-link/6a20a62d5a9093aac76c5f01",
+      "permanent": true
+    },
+    {
+      "source": "/:p([cC][cC][jJ][oO][uU][rR][nN][aA][lL][rR][eE][vV][iI][eE][wW])",
+      "destination": "https://forms.gle/RGxEuSnFN5jCYLhs6",
+      "permanent": true
+    },
+    {
+      "source": "/:p([jJ][oO][uU][rR][nN][aA][lL][rR][eE][vV][iI][eE][wW])",
+      "destination": "https://forms.gle/LX94WqqdsDzhkutU6",
+      "permanent": true
+    }
+  ]
+}
