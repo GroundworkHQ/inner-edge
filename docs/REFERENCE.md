@@ -19,16 +19,22 @@
 - Local preview: `python3 -m http.server 8080` from repo root.
 
 ### Branching
-**On Pages, `main` is production.** A push to `main` is a deploy, so "back up my work" and "publish this" are the same action there. Keep them apart:
+**`main` is production on every host this site has used.** A push to `main` is a deploy, so "back up my work" and "publish this" are the same action there. Keep them apart:
 
 - **Shippable work goes straight to `main`.** Fix, commit, push, live in ~30s.
-- **Work that is not ready goes on a branch.** Commit and push it as often as you like; Pages only builds `main`, so a pushed branch deploys nothing. Merge to `main` when it is signed off, and that merge is the moment it goes live.
+- **Work that is not ready goes on a branch.** Commit and push it as often as you like. Merge to `main` when it is signed off, and that merge is the moment it goes live.
 
 Solo project, so **no PRs and no review step**. Merge directly.
 
-⚠️ **The repo is public.** Anything pushed to any branch is publicly readable straight away, even when it is not rendered on the live page. Check member names, account numbers and personal data before pushing, not just before merging.
+⚠️ **A pushed branch is no longer free.** On GitHub Pages it deployed nothing, because Pages builds `main` only. **Since the site moved to Vercel on 2026-08-17, every pushed branch publishes a URL.** That old assumption is the one to unlearn — this branch predates the move, so if you are reading it here, check §2 and §9 on `main` for current hosting.
 
-Live at the time of writing: `wins-wall` holds the unfinished social proof section (§4).
+**The branch to show people is `preview`.** Cross-project convention agreed 2026-08-17: every project binds `<slug>.miguelloza.com` to its own `preview` branch, so the rule is identical everywhere. Runbook and the `noindex` requirement live in `miguelloza-forwards/README.md`, section "Preview subdomains". The Vercel project now exists, so the remaining setup is one DNS record plus the domain binding.
+
+⚠️ **Vercel's own `*.vercel.app` preview URLs are login-gated and useless for showing a client anything.** The account default is Vercel Authentication on `all_except_custom_domains`. Miguel can open one, Wendy & Lee cannot without team access. That gap is exactly what the `preview` branch convention above exists to close, since a custom domain is outside the gate.
+
+⚠️ **The repo is public.** Anything pushed to any branch is publicly readable straight away, on either host, even when it is not rendered on the live page. Check member names, account numbers and personal data before pushing, not just before merging.
+
+Live at the time of writing: `wins-wall` holds the unfinished social proof section (§4). `apex-domain` holds the domain migration and the Vercel move.
 
 ## 3. Architecture
 Single page, top to bottom: hero → market session bar → Discord → curriculum → coaches → value stack + price → FAQ → final CTA → footer.
