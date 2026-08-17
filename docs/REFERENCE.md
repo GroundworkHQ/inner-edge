@@ -14,7 +14,8 @@
 ## 2. Stack & accounts
 - **This site:** plain static HTML/CSS/JS. No framework, no build step, no dependencies. `index.html` + `css/styles.css` + `js/main.js` + `assets/`.
 - **Hosting today (preview):** GitHub Pages on `GroundworkHQ/inner-edge` (public), proxied to **https://miguelloza.com/inner-edge/** by a rewrite in `miguelloza-forwards/vercel.json`. Push here → live in ~30s. No file sync, no `<base href>`. See the `apex-site-flow` memory note, or run `/publish inner-edge`.
-- **Hosting for the real domain (pending):** **Vercel**, not GitHub Pages. See §9 — the apex migration moves the site itself onto a Vercel project so the legacy short links can be real 301s. GitHub Pages stays as-is underneath, because no `CNAME` is committed, so the `miguelloza.com/inner-edge/` preview above keeps working after the cutover rather than breaking.
+- **Hosting for the real domain, live since 2026-08-17:** **Vercel**, project `inner-edge`, production branch `main`. See §9. The site moved onto Vercel so the legacy short links could be real server-side redirects. GitHub Pages still serves the repo underneath, because no `CNAME` is committed, so the `miguelloza.com/inner-edge/` preview above survived the cutover.
+- ⚠️ **Two public copies now exist**: `inneredgescalping.com` and `miguelloza.com/inner-edge/`. That was fine while the latter was the only URL, but it is duplicate content now. Retire the preview proxy rewrite in `miguelloza-forwards/vercel.json`, or accept it knowingly.
 - ⚠️ **This repo has no `CNAME` on purpose.** Adding one hands the custom domain to GitHub Pages and breaks both the preview proxy and the Vercel setup. The domain is attached on the Vercel side instead.
 - **Full-platform stack: still TBD.** Not decided.
 - **Their existing systems** (not built by us): course platform at `members.inneredgescalping.com`, private Discord server, TradingView (the "IES Indicator"), MT5 / TradeLocker, FTMO for prop funding, and a **GoHighLevel sub-account** that is the actual CRM (see §8).
@@ -153,10 +154,26 @@ Attribution on the booked contacts shows the real path, which is **not** the sal
 
 ## 9. Apex domain migration (inneredgescalping.com)
 
-**Status: built on branch `apex-domain`. No Vercel project created, no DNS moved yet.** Approach changed mid-branch on 2026-08-17 from GitHub Pages meta-refresh folders to Vercel 301s (see below). Miguel owns the domain and is the only person who edits it. Wendy & Lee do not use the GHL redirect panel, and GHL is not the long-term home, so the redirects were moved into this repo rather than left there.
+**Status: SHIPPED 2026-08-17.** `inneredgescalping.com` serves this site from Vercel. Approach changed mid-branch from GitHub Pages meta-refresh folders to Vercel redirects (see below); `apex-domain` was merged to `main`. Miguel owns the domain and is the only person who edits it.
+
+**What was actually done on the day:** Vercel project `inner-edge` (`prj_XfdwqNVtloQOQ8S7rz8HhG24Nmdi`) created against `GroundworkHQ/inner-edge`, production branch `main`, both `inneredgescalping.com` and `www` attached. At Namecheap, apex `A` `162.159.140.166` → `76.76.21.21`, and `www` `CNAME` `sites.ludicrous.cloud` → `cname.vercel-dns.com`. Nothing else touched. Verified: apex serves the page byte-identical to the deployment, all seven redirects resolve correctly, `members` and all email records unchanged.
+
+⚠️ **Vercel's dashboard permanently shows a nameserver mismatch** (`ns1/ns2.vercel-dns.com` intended vs `dns1/dns2.registrar-servers.com` current). This is expected and not a fault — the domain is configured by A/CNAME record, not by delegating nameservers to Vercel. Do not "fix" it by moving nameservers; that would take the email records and `members` with it. Wendy & Lee do not use the GHL redirect panel, and GHL is not the long-term home, so the redirects were moved into this repo rather than left there.
 
 ### Where the domain stood before
-Namecheap DNS. Three hostnames, all on GoHighLevel (`*.ludicrous.cloud`): apex, `www`, and `members`. **No MX, no TXT, no CAA** — the domain carries no email, so there was nothing of that kind to break. The apex had no homepage at all; `/` was itself a redirect into a paid offer.
+Namecheap DNS. Three hostnames on GoHighLevel (`*.ludicrous.cloud`): apex, `www`, and `members`. The apex had no homepage at all; `/` was itself a redirect into a paid offer.
+
+⚠️ **This domain does carry email, and an earlier version of this section said it did not.** That was wrong and it is the dangerous kind of wrong, because it invites someone to "tidy up" records that are load-bearing. `dig` on the apex misses them — they all sit on subdomains. The real set, confirmed in the Namecheap panel 2026-08-17:
+
+| Record | Host | Purpose |
+|---|---|---|
+| `TXT` | `resend._domainkey.mail` | Resend DKIM |
+| `MX` | `send.mail` | `feedback-smtp.us-east-1.amazonses.com`, Resend bounce handling |
+| `TXT` | `_dmarc` | `v=DMARC1; p=none;` |
+
+**What it is for: Gmail's "send mail as" feature**, sending through Resend on `mail.inneredgescalping.com`. So the DKIM record is what keeps those messages authenticated. If it disappeared, mail would start landing in spam and the obvious suspect would be Gmail, not DNS — which is exactly why this is written down here.
+
+**Never touch these during a hosting change.** The apex migration only ever needs `@` and `www`.
 
 ### The redirects
 Pulled from GHL `fetch-redirects-list` on 2026-08-14 and regenerated into static files, never retyped by hand.
@@ -173,7 +190,9 @@ Pulled from GHL `fetch-redirects-list` on 2026-08-14 and regenerated into static
 
 `/` is deliberately absent: that path is the site now. `/replay` was deleted from GHL on 2026-08-14 at Miguel's instruction and is **not** carried over.
 
-**These are real 301s, served by Vercel from `vercel.json`.** No HTML, no JS, no folders.
+**These are real server-side permanent redirects, served by Vercel from `vercel.json`.** No HTML, no JS, no folders.
+
+⚠️ **Vercel issues `308`, not `301`, for `"permanent": true`.** Verified against the live deployment. Same permanent semantics, except 308 also preserves the request method. Nothing to fix, but don't go "correcting" it to 301 after reading an older note, and don't treat a 308 in a link checker as a misconfiguration.
 
 **Why not GitHub Pages.** It was built that way first and then replaced. GitHub Pages cannot do server-side redirects, so each path needed a folder holding a `<meta http-equiv="refresh">` page, and casing needed a lookup map in `404.html` because GHL matched case-insensitively and Pages does not. That map was the problem: **GitHub Pages serves `404.html` with an actual HTTP 404 status** before any JS runs. A human still lands in the right place, but link checkers, email click-tracking and GHL's own link handling see a dead link. These seven paths live in emails and Discord posts, so that mattered more than it would on an ordinary page. Deleted in favour of Vercel on 2026-08-17.
 
@@ -198,7 +217,7 @@ Vercel gives every branch push its own preview URL, which GitHub Pages cannot �
 ### Rollback
 **Leave the GHL redirects configured.** They go inert the moment the apex moves but are not deleted, so pointing the apex `A` record back at `162.159.140.166` restores the previous behaviour immediately. Do not tidy them up until this has been live and stable for a while.
 
-⚠️ **301s are cached hard by browsers**, which the old meta-refresh version was not. Rollback restores the *server* behaviour immediately, but anyone who already hit a redirected path keeps going to the same target until their cache clears. If a destination URL is likely to change soon (the Stripe and fastpaydirect links especially), consider `"permanent": false` on that one entry rather than discovering it the hard way.
+⚠️ **Permanent redirects are cached hard by browsers**, which the old meta-refresh version was not. Rollback restores the *server* behaviour immediately, but anyone who already hit a redirected path keeps going to the same target until their cache clears. If a destination URL is likely to change soon (the Stripe and fastpaydirect links especially), consider `"permanent": false` on that one entry rather than discovering it the hard way.
 
 ### Known side effect
 ~~Adding `CNAME` breaks the `miguelloza.com/inner-edge/` preview.~~ Resolved by moving to Vercel — no `CNAME` is committed, so GitHub Pages keeps serving `groundworkhq.github.io/inner-edge/` and the proxy preview survives the cutover. §2 records this. The `apex-site-flow` memory note needs no change.
