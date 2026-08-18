@@ -631,6 +631,150 @@ main, .nav, .foot { position: relative; z-index: 3; }
   padding: 0 .25rem; border-radius: 4px;
 }
 
+/* ---------- Wins wall (social proof) ----------
+   Real member messages lifted out of the Discord and rebuilt as cards.
+   Deliberately keeps Discord's visual language (avatar, display name,
+   timestamp, reaction pills) so it reads as a room people are actually
+   talking in, not as a marketing testimonial block. */
+/* Capped column width plus centring, so one or two cards sit as cards
+   rather than stretching into a single banner across the full wrap. */
+.wins {
+  display: grid;
+  gap: clamp(.9rem, 2vw, 1.2rem);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 285px), 350px));
+  justify-content: center;
+  align-items: start;
+}
+
+.win {
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(14,21,38,.92), rgba(9,13,24,.94));
+  padding: 1.05rem 1.15rem;
+  display: grid;
+  gap: .7rem;
+  transition: border-color .25s var(--ease), transform .25s var(--ease);
+}
+@media (hover: hover) {
+  .win:hover { border-color: var(--line-2); transform: translateY(-2px); }
+}
+
+.win__head { display: grid; grid-template-columns: auto 1fr; gap: .7rem; align-items: center; }
+
+/* Avatar falls back to an initial disc, so a win can ship without us
+   republishing a member's profile picture. */
+.win__av {
+  width: 36px; height: 36px; border-radius: 50%;
+  object-fit: cover; flex: none; display: block;
+  background: var(--panel-2);
+}
+.win__av--letter {
+  display: grid; place-items: center;
+  font-family: var(--f-display);
+  font-size: 1rem; font-weight: 700; letter-spacing: .02em;
+  color: var(--ink);
+  background: linear-gradient(135deg, var(--cyan), var(--electric));
+}
+
+.win__who { min-width: 0; }
+.win__name {
+  display: block; color: var(--chrome);
+  font-size: .89rem; font-weight: 600;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.win__when {
+  display: block; font-family: var(--f-mono);
+  font-size: .68rem; letter-spacing: .04em; color: var(--muted);
+}
+
+.win__text {
+  margin: 0; font-size: .91rem; line-height: 1.6; color: var(--text);
+  white-space: pre-line;
+}
+
+/* Attached proof: a chart, or a cropped pass certificate. Certificates are
+   light documents, and a raw white block on a dark card is jarring, so it
+   sits slightly dimmed and comes up to full on hover. */
+.win__proof { margin: 0; line-height: 0; }
+.win__proof img {
+  width: 100%; max-height: 210px;
+  object-fit: contain; object-position: center;
+  display: block;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.04);
+  opacity: .88;
+  transition: opacity .25s var(--ease);
+}
+@media (hover: hover) {
+  .win:hover .win__proof img { opacity: 1; }
+}
+
+.win__reacts { display: flex; flex-wrap: wrap; gap: .35rem; }
+.win__react {
+  display: inline-flex; align-items: center; gap: .3rem;
+  padding: .12rem .45rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(30,155,255,.08);
+  font-family: var(--f-mono);
+  font-size: .68rem; color: var(--text);
+}
+
+/* Badge marks the verified fact behind a message, e.g. a prop-firm pass
+   we have seen the certificate for. */
+.win__badge {
+  display: inline-flex; align-items: center; gap: .4rem;
+  justify-self: start;
+  padding: .2rem .55rem;
+  border: 1px solid rgba(33,229,138,.3);
+  border-radius: 999px;
+  background: rgba(33,229,138,.09);
+  font-family: var(--f-mono);
+  font-size: .66rem; letter-spacing: .03em; color: var(--up);
+}
+.win__badge::before {
+  content: ""; width: 5px; height: 5px; border-radius: 50%;
+  background: var(--up); flex: none;
+}
+
+/* ---------- Milestones (proof without a quote) ---------- */
+.miles {
+  margin-top: clamp(1.1rem, 3vw, 1.6rem);
+  padding: 1.1rem 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(11,17,32,.55);
+}
+.miles__cap {
+  margin: 0 0 .75rem;
+  font-family: var(--f-mono);
+  font-size: .68rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted);
+}
+.miles__list { display: grid; gap: .6rem; }
+.miles__list li {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: .7rem; align-items: baseline;
+  font-size: .89rem; color: var(--text);
+}
+.miles__who { color: var(--chrome); font-weight: 600; white-space: nowrap; }
+.miles__when {
+  font-family: var(--f-mono); font-size: .68rem;
+  color: var(--muted); white-space: nowrap;
+}
+@media (max-width: 560px) {
+  .miles__list li { grid-template-columns: 1fr; gap: .15rem; }
+}
+
+.wins__note {
+  margin: clamp(1.5rem, 4vw, 2.2rem) auto 0;
+  max-width: 62ch; text-align: center;
+  font-size: .8rem; line-height: 1.65; color: var(--muted);
+}
+
 /* ---------- Value stack (itemised receipt) ----------
    Dot leaders + a right-aligned money column, so it reads as an
    itemised invoice that totals up, rather than a feature list. */

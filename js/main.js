@@ -746,4 +746,143 @@
      --------------------------------------------------------- */
   var yr = document.querySelector("[data-year]");
   if (yr) yr.textContent = new Date().getFullYear();
+
+  /* ---------------------------------------------------------
+     7. Wins wall (social proof)
+
+     ⚠️ Every entry in WINS must be a message a real member actually
+     posted, copied word for word from the Discord, including typos.
+     Do not tidy the wording, do not merge two messages into one, and
+     do not write a new one. Fabricated social proof is the single
+     thing this page has consistently refused to do, and a trading
+     audience is the one audience that would spot it.
+
+     Before an entry goes in, it needs Wendy or Lee to have the
+     member's permission to republish it. `name` should be whatever
+     that permission covers, which is usually a first name or a
+     Discord handle rather than a full legal name.
+
+     Fields:
+       name      display name to show
+       when      rough date, e.g. "Jul 2026". Kept vague on purpose.
+       text      the message, verbatim. \n for line breaks.
+       avatar    optional, path under assets/wins/. Omit to fall back
+                 to an initial disc, which avoids republishing a
+                 member's profile photo.
+       proof     optional, path to an attached image such as a chart
+                 or a pass certificate. Crop it before it goes in:
+                 no account numbers, balances, broker logins, KYC or
+                 onboarding links, and no third party's signature.
+                 Must be the original upload, not a re-screenshot of
+                 the Discord post, or it renders as mush.
+       proofAlt  required if proof is set. Describes the image.
+       reactions optional, [{ emoji: "🔥", n: 7 }]
+
+     The section stays hidden while this array is empty, so a stub
+     never ships to a live page.
+     --------------------------------------------------------- */
+  var WINS = [
+    {
+      /* Full name used with permission. Lee B. is abbreviated because he
+         specifically asked for it, so the two are inconsistent on purpose. */
+      name: "Matty Kettle",
+      when: "Jul 2026",
+      text: "I know it’s a drop in the ocean\nAnd not the account I wanted to pass\nBut I’m so stoked\nThat I am heading in the direction I want to be",
+      badge: "Prop firm evaluation passed",
+      reactions: [{ emoji: "❤️", n: 18 }, { emoji: "🔥", n: 7 }]
+    }
+  ];
+
+  /* Proof we hold but with no message attached to it. Phrased as our
+     statement of what happened, never as words from the member. */
+  var MILESTONES = [
+    {
+      who: "Lee B.",
+      what: "Passed stage two of a prop firm evaluation",
+      when: "Aug 2026"
+    }
+  ];
+
+  var winsGrid = document.getElementById("winsGrid");
+  var winsSection = document.getElementById("wins");
+
+  if (winsGrid && winsSection && WINS.length) {
+    function escHtml(s) {
+      return String(s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    var winsHtml = "";
+    for (var w = 0; w < WINS.length; w++) {
+      var win = WINS[w];
+
+      var av = win.avatar
+        ? '<img class="win__av" src="' + escHtml(win.avatar) + '" alt="" width="36" height="36" />'
+        : '<span class="win__av win__av--letter" aria-hidden="true">' +
+            escHtml(win.name.trim().charAt(0).toUpperCase()) +
+          "</span>";
+
+      var proof = "";
+      if (win.proof) {
+        proof =
+          '<figure class="win__proof">' +
+            '<img src="' + escHtml(win.proof) + '" alt="' + escHtml(win.proofAlt || "") + '" loading="lazy" />' +
+          "</figure>";
+      }
+
+      var reacts = "";
+      if (win.reactions && win.reactions.length) {
+        reacts = '<div class="win__reacts">';
+        for (var r = 0; r < win.reactions.length; r++) {
+          reacts +=
+            '<span class="win__react">' +
+              escHtml(win.reactions[r].emoji) +
+              "<b>" + escHtml(win.reactions[r].n) + "</b>" +
+            "</span>";
+        }
+        reacts += "</div>";
+      }
+
+      var badge = win.badge
+        ? '<span class="win__badge">' + escHtml(win.badge) + "</span>"
+        : "";
+
+      winsHtml +=
+        '<figure class="win">' +
+          '<figcaption class="win__head">' +
+            av +
+            '<span class="win__who">' +
+              '<span class="win__name">' + escHtml(win.name) + "</span>" +
+              '<span class="win__when">' + escHtml(win.when || "") + "</span>" +
+            "</span>" +
+          "</figcaption>" +
+          '<blockquote class="win__text">' + escHtml(win.text) + "</blockquote>" +
+          proof +
+          badge +
+          reacts +
+        "</figure>";
+    }
+
+    winsGrid.innerHTML = winsHtml;
+    winsSection.removeAttribute("hidden");
+
+    var milesWrap = document.getElementById("winsMiles");
+    var milesList = document.getElementById("winsMilesList");
+    if (milesWrap && milesList && MILESTONES.length) {
+      var milesHtml = "";
+      for (var m = 0; m < MILESTONES.length; m++) {
+        milesHtml +=
+          "<li>" +
+            '<span class="miles__who">' + escHtml(MILESTONES[m].who) + "</span>" +
+            "<span>" + escHtml(MILESTONES[m].what) + "</span>" +
+            '<span class="miles__when">' + escHtml(MILESTONES[m].when) + "</span>" +
+          "</li>";
+      }
+      milesList.innerHTML = milesHtml;
+      milesWrap.removeAttribute("hidden");
+    }
+  }
 })();
