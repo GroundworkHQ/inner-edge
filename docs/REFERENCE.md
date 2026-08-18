@@ -33,6 +33,11 @@ The card shown when the URL is dropped in Discord, iMessage or Slack. Before thi
   sips -s format jpeg -s formatOptions 82 /tmp/og.png -o assets/og-card.jpg
   ```
 - ⚠️ **Bump `?v=` on the `og:image` URL whenever the image changes.** Scrapers cache by URL, so replacing the file alone leaves the old picture in every future unfurl. Currently `?v=2`.
+- **Favicons are two different renderings on purpose**, settled 2026-08-17 after testing at real size:
+  - `favicon-32.png` — a **flattened** mark: navy disc, solid gold WL. Untouched, and it must stay this way. The real badge artwork resampled to 32px collapses into a dark blob with the WL barely legible, and the tab icon is the most-seen instance of the brand.
+  - `favicon-180/192/512.png` — the **actual WL badge artwork** (`~/Downloads/WhatsApp_Image_2026-02-28_at_12.15.37.jpeg`, 1024x1024 square). At Apple-touch and Android-icon sizes there is enough room for the bull, bear, candles and stars to read, and it looks far better than the flat mark.
+  - ⚠️ **Do not unify them for consistency.** That was considered and rejected. If you change either, render at 32px and look at it first.
+  - ⚠️ **Browsers cache favicons harder than almost anything.** The large ones carry `?v=2`; bump it on any change or you will not see the new icon and will assume the change failed.
 - ⚠️ **Platforms cache unfurls hard.** Editing these tags does not update a preview that already exists in a Discord or iMessage thread. Some only re-scrape on a new URL. Test in a fresh channel, and do not assume a stale card means the tags are wrong.
 
 ## 3. Architecture
