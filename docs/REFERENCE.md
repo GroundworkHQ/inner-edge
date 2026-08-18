@@ -24,7 +24,7 @@
 ### Link preview / Open Graph — added 2026-08-17
 The card shown when the URL is dropped in Discord, iMessage or Slack. Before this the page had **no OG tags at all**, so platforms fell back to a narrow favicon strip.
 
-- **`og:title` is deliberately not `<title>`.** The card reads **"Trade With Precision. Win With Edge."** (their real tagline, Miguel's call); the `<title>` keeps "Inner Edge Scalping | ..." because that is what shows in a browser tab and in search results, where the brand name has to appear. Do not "fix" the mismatch.
+- **`<title>`, `og:title` and `twitter:title` are all the same string** and should stay that way: **"Inner Edge Scalping | Trade With Precision. Win With Edge."** Miguel's wording, settled 2026-08-17. It carries the brand name, which search results and a browser tab need, and their real tagline, which is what the shared card should lead with. An earlier version split them, tagline in the card and brand in the tab; that was replaced because one string does both jobs.
 - ⚠️ **`og:image` must be an absolute URL.** A relative path silently fails in most scrapers. It points at `https://inneredgescalping.com/assets/og-card.jpg`, so it only resolves on the real domain.
 - **`assets/og-card.jpg` is generated, 1200x630.** The source badge is square (1024x1024) and a square in an OG slot gets centre-cropped, which cuts the bull and bear heads off. It is fitted whole onto a `--void` (#04060c) canvas instead. Regenerate from a square source with:
   ```
