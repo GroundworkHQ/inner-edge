@@ -26,11 +26,13 @@ The card shown when the URL is dropped in Discord, iMessage or Slack. Before thi
 
 - **`<title>`, `og:title` and `twitter:title` are all the same string** and should stay that way: **"Inner Edge Scalping | Trade With Precision. Win With Edge."** Miguel's wording, settled 2026-08-17. It carries the brand name, which search results and a browser tab need, and their real tagline, which is what the shared card should lead with. An earlier version split them, tagline in the card and brand in the tab; that was replaced because one string does both jobs.
 - ⚠️ **`og:image` must be an absolute URL.** A relative path silently fails in most scrapers. It points at `https://inneredgescalping.com/assets/og-card.jpg`, so it only resolves on the real domain.
-- **`assets/og-card.jpg` is generated, 1200x630.** The source badge is square (1024x1024) and a square in an OG slot gets centre-cropped, which cuts the bull and bear heads off. It is fitted whole onto a `--void` (#04060c) canvas instead. Regenerate from a square source with:
+- **`assets/og-card.jpg` is generated, 1200x630**, from `~/Documents/Images/blacklogo.png` (the Inner Edge oval wordmark, 1535x962). Miguel's choice 2026-08-17, replacing a first attempt built from the square WL badge. **Crop, do not pad.** The artwork's textured background runs to the edges, so letterboxing it onto a flat `--void` canvas leaves a visible seam; cropping to the OG ratio fills the frame. The oval sits mid-frame so trimming top and bottom costs nothing:
   ```
-  sips --resampleHeight 630 <square>.jpg -o /tmp/t.jpg
-  sips -p 630 1200 --padColor 04060C /tmp/t.jpg -o assets/og-card.jpg
+  sips -c 806 1535 blacklogo.png -o /tmp/c.png      # centre-crop to 1.905:1
+  sips -z 630 1200 /tmp/c.png -o /tmp/og.png
+  sips -s format jpeg -s formatOptions 82 /tmp/og.png -o assets/og-card.jpg
   ```
+- ⚠️ **Bump `?v=` on the `og:image` URL whenever the image changes.** Scrapers cache by URL, so replacing the file alone leaves the old picture in every future unfurl. Currently `?v=2`.
 - ⚠️ **Platforms cache unfurls hard.** Editing these tags does not update a preview that already exists in a Discord or iMessage thread. Some only re-scrape on a new URL. Test in a fresh channel, and do not assume a stale card means the tags are wrong.
 
 ## 3. Architecture
