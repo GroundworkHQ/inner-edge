@@ -14,12 +14,24 @@
 ## 2. Stack & accounts
 - **This site:** plain static HTML/CSS/JS. No framework, no build step, no dependencies. `index.html` + `css/styles.css` + `js/main.js` + `assets/`.
 - **Hosting, live since 2026-08-17:** **Vercel**, project `inner-edge` (`prj_XfdwqNVtloQOQ8S7rz8HhG24Nmdi`), production branch `main`, serving **https://inneredgescalping.com** and `www`. Push to `main` → deployed. See §9 for the cutover and the DNS.
-- **`miguelloza.com/inner-edge/` is retired**, removed from `miguelloza-forwards/vercel.json` on 2026-08-17 and **now 404s**. It was the pre-launch preview; once the real domain went live it was a second public copy of the same page. Do not restore it. Unfinished work goes to a `preview` branch instead, see below.
+- **`miguelloza.com/inner-edge/` is retired**, 2026-08-17. It was the pre-launch preview; once the real domain went live it was a second public copy of the same page. The rewrites in `miguelloza-forwards/vercel.json` were replaced with **307 redirects** here, so old preview links still land on the real site (deep links too, `/inner-edge/joinies` chains through to the members offer). Do not restore the proxy. Unfinished work goes to a `preview` branch instead.
 - GitHub Pages still builds this repo at `groundworkhq.github.io/inner-edge/`, harmlessly, because no `CNAME` is committed. Nothing points at it.
 - ⚠️ **This repo has no `CNAME` on purpose.** Adding one hands the domain to GitHub Pages and breaks the Vercel setup. The domain is attached on the Vercel side.
 - **Full-platform stack: still TBD.** Not decided.
 - **Their existing systems** (not built by us): course platform at `members.inneredgescalping.com`, private Discord server, TradingView (the "IES Indicator"), MT5 / TradeLocker, FTMO for prop funding, and a **GoHighLevel sub-account** that is the actual CRM (see §8).
 - Local preview: `python3 -m http.server 8080` from repo root.
+
+### Link preview / Open Graph — added 2026-08-17
+The card shown when the URL is dropped in Discord, iMessage or Slack. Before this the page had **no OG tags at all**, so platforms fell back to a narrow favicon strip.
+
+- **`og:title` is deliberately not `<title>`.** The card reads **"Trade With Precision. Win With Edge."** (their real tagline, Miguel's call); the `<title>` keeps "Inner Edge Scalping | ..." because that is what shows in a browser tab and in search results, where the brand name has to appear. Do not "fix" the mismatch.
+- ⚠️ **`og:image` must be an absolute URL.** A relative path silently fails in most scrapers. It points at `https://inneredgescalping.com/assets/og-card.jpg`, so it only resolves on the real domain.
+- **`assets/og-card.jpg` is generated, 1200x630.** The source badge is square (1024x1024) and a square in an OG slot gets centre-cropped, which cuts the bull and bear heads off. It is fitted whole onto a `--void` (#04060c) canvas instead. Regenerate from a square source with:
+  ```
+  sips --resampleHeight 630 <square>.jpg -o /tmp/t.jpg
+  sips -p 630 1200 --padColor 04060C /tmp/t.jpg -o assets/og-card.jpg
+  ```
+- ⚠️ **Platforms cache unfurls hard.** Editing these tags does not update a preview that already exists in a Discord or iMessage thread. Some only re-scrape on a new URL. Test in a fresh channel, and do not assume a stale card means the tags are wrong.
 
 ## 3. Architecture
 Single page, top to bottom: hero → market session bar → Discord → curriculum → coaches → value stack + price → FAQ → final CTA → footer.
