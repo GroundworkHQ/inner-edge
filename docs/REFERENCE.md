@@ -176,6 +176,13 @@ Their real tagline **"Trade With Precision. Win With Edge."** is now the hero H1
 - Real domain: `inneredgescalping.com` is theirs and already hosts `members.` — the miguelloza.com URL is only a preview.
 
 ## 8. GoHighLevel CRM
+
+> ⚠️ **TradingView access sync is a separate, active workstream and its notes are NOT in this repo.**
+> Read **`~/Documents/inner-edge-reconcile/HANDOFF.md`** before touching indicator access, GHL tags, the
+> `TradingView Username` custom field, or the access Google Form. That folder is deliberately outside this
+> repo because it holds customer email addresses and **this repo is public**. Never move it in here.
+> Last worked 2026-09-01.
+
 Discovered 2026-08-04 when the official HighLevel MCP was wired into Claude Code. **The `highlevel` MCP server is bound to this sub-account and no other** — every operation it runs hits Inner Edge Scalping. Verified with `list_locations` + `get-location`. See the `reference_highlevel-mcp` memory note for the server setup itself.
 
 ### Sub-account
