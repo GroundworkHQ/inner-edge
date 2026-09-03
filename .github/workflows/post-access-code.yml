@@ -1,0 +1,121 @@
+# Posts the month's Inner Edge IES Trend access code to Discord, then reports to
+# a dead man's switch so a run that never happens gets noticed.
+#
+# The code is DERIVED from the month, not stored. This computes the identical
+# keyed hash the Pine indicator computes, so the two always agree and there is
+# no list to maintain and nothing that ever expires.
+#
+# Runs just after midnight UTC on the 1st, the moment the new code starts
+# working. The indicator honours the previous code for 3 more days, so a missed
+# run is a nuisance with a 3 day window, not an outage.
+#
+# THREE SECRETS (Settings > Secrets and variables > Actions):
+#   DISCORD_WEBHOOK_URL   webhook for the members-only channel
+#   IES_CODE_SALT         the integer salt, must match CODE_SALT in the Pine script
+#   HEALTHCHECK_PING_URL  https://hc-ping.com/<uuid> from healthchecks.io (optional)
+#
+# If the salt here and the salt in the indicator ever drift apart, this posts a
+# code that unlocks nothing. Change one, change the other, same day.
+#
+# KNOWN LIMIT: GitHub disables scheduled workflows in public repos after 60 days
+# with no commits. It emails first. The dead man's switch is what actually
+# catches it, since that email is easy to miss.
+name: Post IES Trend access code
+
+on:
+  schedule:
+    # 00:07 UTC on the 1st. Off the hour on purpose, GitHub delays round numbers.
+    - cron: '7 0 1 * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Show what would be posted without sending it'
+        type: boolean
+        default: true
+
+permissions: {}
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      # One step on purpose. Splitting it would put the code in a step output,
+      # and it has no reason to leave this shell.
+      - name: Derive the code, post it, report in
+        env:
+          SALT: ${{ secrets.IES_CODE_SALT }}
+          WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          HC: ${{ secrets.HEALTHCHECK_PING_URL }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          # Deliberately no -e. Every failure path pings the switch first.
+          set -uo pipefail
+
+          DRY="${DRY_RUN:-false}"
+
+          # Best effort, always. Monitoring must never be the thing that breaks
+          # the job it is monitoring. A dry run pings nothing, or a manual test
+          # would satisfy the switch and mask a real miss.
+          ping() {
+            if [ "$DRY" = "true" ] || [ -z "${HC:-}" ]; then
+              return 0
+            fi
+            curl -fsS -m 10 --retry 3 -o /dev/null --data-raw "${2:-}" "${HC}${1}" || true
+            return 0
+          }
+
+          fail() {
+            echo "::error::$1"
+            ping "/fail" "$1"
+            exit 1
+          }
+
+          ping "/start"
+
+          [ -n "${SALT:-}" ] || fail "IES_CODE_SALT secret is missing or empty."
+          case "$SALT" in (*[!0-9]*|"") fail "IES_CODE_SALT must be a plain integer." ;; esac
+
+          # Must stay byte for byte identical to f_monthCode() in the Pine script.
+          # 10# forces base 10, or a month like 09 is read as invalid octal.
+          M=1073741789
+          A=48271
+          ALPHA="23456789ABCDEFGHJKLMNPQRSTUVWXYZ"
+
+          YEAR=$(( 10#$(date -u +%Y) ))
+          MONTH=$(( 10#$(date -u +%m) ))
+          MON=$(date -u +%b | tr '[:lower:]' '[:upper:]')
+          MONTH_NAME=$(date -u +'%B %Y')
+
+          H=$(( ( (YEAR - 2000) * 12 + (MONTH - 1) + SALT ) % M ))
+          for _ in 1 2 3; do H=$(( (H * A) % M )); done
+
+          TAIL=""
+          for _ in 1 2 3 4; do
+            IDX=$(( H % 32 ))
+            TAIL="${TAIL}${ALPHA:$IDX:1}"
+            H=$(( H / 32 ))
+          done
+
+          CODE="IES-${MON}-${TAIL}"
+
+          # Keep it out of the run log even if something below echoes it.
+          echo "::add-mask::$CODE"
+
+          CONTENT=$(printf '**IES Trend access code for %s**\n```\n%s\n```\nPaste it into the indicator under Indicator Settings --> Access.\nLast code keeps working until the 4th, then stops.' "$MONTH_NAME" "$CODE")
+
+          if [ "$DRY" = "true" ]; then
+            echo "DRY RUN. Nothing sent, no ping. Derived a code for $MONTH_NAME, message is ${#CONTENT} chars."
+            exit 0
+          fi
+
+          [ -n "${WEBHOOK:-}" ] || fail "DISCORD_WEBHOOK_URL secret is missing or empty."
+
+          # allowed_mentions blocks an accidental @everyone if the copy changes.
+          STATUS=$(jq -n --arg c "$CONTENT" '{content: $c, allowed_mentions: {parse: []}}' \
+            | curl -sS -o /dev/null -w '%{http_code}' -m 30 \
+                -X POST -H 'Content-Type: application/json' -d @- "$WEBHOOK")
+
+          [ "$STATUS" = "204" ] || fail "Discord rejected the post, HTTP $STATUS"
+
+          echo "Posted the $MONTH_NAME code to Discord."
+          ping "" "Posted the $MONTH_NAME code."
