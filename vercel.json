@@ -9,6 +9,11 @@
       "permanent": true
     },
     {
+      "source": "/:p([bB][lL][aA][cC][kK][fF][rR][iI][dD][aA][yY]77)",
+      "destination": "https://link.fastpaydirect.com/payment-link/69f308088e7406bd4d4a478e?couponCode=BLACKFRIDAY77",
+      "permanent": false
+    },
+    {
       "source": "/:p([jJ][oO][iI][nN])",
       "destination": "https://tally.so/r/BzGL5e",
       "permanent": true
